@@ -1,0 +1,13 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #020202;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  flex: 1;
+}
