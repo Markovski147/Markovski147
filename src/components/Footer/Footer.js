@@ -115,13 +115,13 @@ const Footer = () => {
     <FooterContainer>
       <div className='search-container'>
         <div className='src-product'>
-          <input type="text" />
+          <input type="text" value={'Search for product'} />
           <div className='src-btn'>
             <FaSearch />
           </div>
         </div>
         <div className='subs'>
-          <input type="text"/>
+          <input type="text" value={'Enter email'} />
           <div className='sub-btn'>
             <div>
               SUBSCRIBE NOW

@@ -17,6 +17,11 @@ const ProductDetailsContainer = styled.div`
     border-radius: 5px;
     margin-bottom: 30px;
     height: 300px;
+    
+    @media (max-width: 600px) {
+        height: 400px;
+        width: 450px;
+    }
 }
 
     .listView {
@@ -29,6 +34,10 @@ const ProductDetailsContainer = styled.div`
 .imgDiv {
     height: 200px;
     width: 100%;
+    
+    @media (max-width: 600px) {
+        width: 300px;
+    }
 }
 
 img {

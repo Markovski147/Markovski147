@@ -135,6 +135,10 @@ justify-content: center;
     height: 100px;
     border-radius: 5px;
     padding: 30px;
+    
+    @media (max-width: 600px) {
+        width: 360px;
+    }
 
     h2 {
         margin: 0
@@ -153,6 +157,10 @@ justify-content: center;
         form select{
             width: 120px;
         }
+        
+        @media (max-width: 600px) {
+            left: 200px;
+        }
     }
 }
 
@@ -160,6 +168,10 @@ justify-content: center;
     display: flex;
     justify-content: end;
     margin-top: 20px;
+    
+    @media (max-width: 600px) {
+        width: 420px;
+    }
 
     svg {
         position: relative;
@@ -168,6 +180,10 @@ justify-content: center;
         right: 510px;
         cursor: pointer;
         opacity: 70%;
+        
+        @media (max-width: 600px) {
+            right: 312px;
+        }
         
         :hover {
             opacity: 100%;
@@ -202,6 +218,12 @@ justify-content: center;
     display: grid;
     grid-template-columns: repeat(2, 300px);
     justify-content: space-between;
+    
+    @media (max-width: 600px) {
+        width: 420px;
+        grid-template-columns: repeat(2, 200px);
+    }
+}
 
     .card {
         display: flex;

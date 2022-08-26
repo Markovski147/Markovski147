@@ -18,7 +18,7 @@ const WhoAreWeContainer = styled.div`
         margin: 50px auto;
         max-width: 1000px;
         padding: 0 20px;
-        min-width: 500px;
+        min-width: 450px;
     }
 
     .img-container {
@@ -30,8 +30,8 @@ const WhoAreWeContainer = styled.div`
             width: 600px;
         }
         
-        @media (max-width: 720px) {
-            width: 520px;
+        @media (max-width: 600px) {
+            width: 490px;
         }
     }
     
@@ -45,7 +45,13 @@ const WhoAreWeContainer = styled.div`
             weight: 240px;
             aspect-ratio: 1 / 1;
             margin: 20px 0;
+
+            @media (max-width: 600px) {
+                width: 220px;
+                weight: 240px;
+                margin: 10px 0;
             }
+        }
         
 
         @media (max-width: 992px) {

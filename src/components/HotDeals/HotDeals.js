@@ -18,6 +18,10 @@ const HotDealsContainer = styled.div`
         @media (max-width: 992px) {
             width: 500px;
         }
+        
+        @media (max-width: 600px) {
+            width: 400px;
+        }
     }
 
     .gridContainer {
