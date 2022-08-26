@@ -126,7 +126,6 @@ justify-content: center;
 
 .cardsContainer{
     display: inline;
-    width: 620px;
 }
 
 .productHeading{
