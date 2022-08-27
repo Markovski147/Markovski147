@@ -12,7 +12,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 
 function App() {
   return (
-    <div className="app" content="width=device-width, initial-scale=1.0">
+    <div className="app">
       <NavBar navItems={NAV_ITEMS} />
       <Switch>
         <Route path='/' exact>
