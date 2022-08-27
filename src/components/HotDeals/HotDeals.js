@@ -20,7 +20,7 @@ const HotDealsContainer = styled.div`
         }
         
         @media (max-width: 600px) {
-            width: 400px;
+            width: 420px;
         }
     }
 

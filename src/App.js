@@ -9,10 +9,11 @@ import NotFound from './pages/NotFound';
 import CheckoutPage from './pages/CheckoutPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import { screenWidth } from './screenWidth';
 
 function App() {
   return (
-    <div className="app">
+    <div className="app" width="110%">
       <NavBar navItems={NAV_ITEMS} />
       <Switch>
         <Route path='/' exact>
