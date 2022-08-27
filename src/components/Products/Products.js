@@ -21,6 +21,9 @@ justify-content: center;
     @media (max-width: 992px) {
     justify-content: center;
     }
+    
+    @media (max-width: 600px) {
+        width: fit-content;
 }
 
 .sideBarContainer {
