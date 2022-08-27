@@ -42,7 +42,7 @@ const WhoAreWeContainer = styled.div`
 
             img {
             height: 240px;
-            weight: 240px;
+            width: 240px;
             aspect-ratio: 1 / 1;
             margin: 20px 0;
 

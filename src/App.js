@@ -13,7 +13,7 @@ import { screenWidth } from './screenWidth';
 
 function App() {
   return (
-    <div className="app" width="110%">
+    <div className="app" width={`${screenWidth}`}>
       <NavBar navItems={NAV_ITEMS} />
       <Switch>
         <Route path='/' exact>
