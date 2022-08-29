@@ -31,15 +31,25 @@ const FooterContainer = styled.div`
     @media (max-width: 720px) and (orientation:portrait) {
       justify-content: center;
       margin: 10px 0 10px 0;
+      width: 90%;
+      max-width: 350px;
       }
     }
 
     .search-container input{
       padding: 20px;
+      
+      @media (max-width: 600px) {
+        width: 90%;
+      }
      }
 
     .src-product input {
       width: 300px;
+      
+      @media (max-width: 600px) {
+        width: 90%;
+      }
     }
 
     .src-btn, .sub-btn {
@@ -51,6 +61,7 @@ const FooterContainer = styled.div`
       background: #db1f1f;
       font-weight: 800;
       font-size: 12px;
+      text-align: center;
      }
 
     .src-btn {

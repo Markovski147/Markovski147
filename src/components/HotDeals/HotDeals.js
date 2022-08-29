@@ -8,11 +8,15 @@ const HotDealsContainer = styled.div`
 
     h1 {
         text-transform: uppercase;
+        
+        @media (max-width: 600px) {
+            margin: 0 10px;
+        }
     }
 
     .cardContainer {
         display: block;
-        width: 992px;
+        width: 1100px;
         margin: 0 auto;
 
         @media (max-width: 992px) {
@@ -20,7 +24,9 @@ const HotDealsContainer = styled.div`
         }
         
         @media (max-width: 600px) {
-            width: 400px;
+            width: auto;
+            max-width:400px;
+            margin: 0 auto;
         }
     }
 
@@ -32,16 +38,26 @@ const HotDealsContainer = styled.div`
         img {
             width: 200px;
             height: 200px;
+            
+        @media (max-width: 600px) {
+            width: 100% ;
+            height: auto;
+        }
         }
 
         @media (max-width: 992px) {
-            grid-template-columns: repeat(2, 200px);s
+            grid-template-columns: repeat(2, auto);
         }
     }
 
     .card {
         height: 350px;
         margin: 30px 0;
+        
+        @media (max-width: 600px) {
+            margin: 30px 10px;
+            height: auto;
+        }
 
         img {
             margin: 0 0 30px 0;

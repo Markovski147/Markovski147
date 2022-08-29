@@ -105,7 +105,8 @@ const NavBarContainer = styled.div`
     
     .activeNav {
       width: 360px;
-      @media (max-width: 720px) {
+
+      @media (max-width: 600px) {
         width: 100%;
       }
       

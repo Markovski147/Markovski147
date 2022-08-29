@@ -3,6 +3,8 @@ import search from '../../assets/search.svg';
 import cart from '../../assets/cart.svg';
 import user from '../../assets/user.svg';
 import { Link } from "react-router-dom";
+import { useContext } from 'react';
+import ProductContext from '../../store/productsList';
 
 const NavbarButtonsContainer = styled.div`
   display: flex;
@@ -35,6 +37,9 @@ const NavbarButtonsContainer = styled.div`
 
 // TODO: Implmenet Link component for all navigation buttons
 const NavbarButtons = ({ isLoggedIn }) => {
+
+  const {wishListProducts} = useContext(ProductContext);
+
   return (
     <NavbarButtonsContainer>
       <div className='search-btn btn-container'>
@@ -42,7 +47,7 @@ const NavbarButtons = ({ isLoggedIn }) => {
       </div>
       <div className='cart-btn btn-container'>
         <img src={cart} alt='Cart' />
-        <span className='cart-values'>0</span>
+        <span className='cart-values'>{wishListProducts}</span>
       </div>
       {isLoggedIn ? (
         <button className='auth-btn btn-container'>

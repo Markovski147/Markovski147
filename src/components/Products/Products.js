@@ -37,12 +37,16 @@ justify-content: center;
     @media (max-width: 992px) {
         position: fixed;
         top: 0px;
-        padding: 100px 0;
+        padding: 26px 0px 0px 50px;
         height: 100%;
         transition: 0.5s;
         left: 0px;
         background: #111;
     }
+    
+    @media (max-width: 600px) {
+        width: 100%;
+      }
 
     .side-close {
         position: relative;
@@ -57,6 +61,10 @@ justify-content: center;
         font-size: 20px;
         font-weight: bold;
         text-align: center;
+        
+        @media (max-width: 600px) {
+            margin-right: 75px;
+        }
 
         @media (min-width: 992px) {
             display: none;
@@ -122,6 +130,7 @@ justify-content: center;
     
         @media (max-width: 992px) {
         width: 0;
+        padding: 0;
         }
     }
 }
@@ -140,6 +149,9 @@ justify-content: center;
     
     @media (max-width: 600px) {
         width: 360px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     h2 {
@@ -149,19 +161,23 @@ justify-content: center;
     span {
         position: relative;
         top: 42px;
+
+        @media (max-width: 600px) {
+            position: inherit;
+        }
     }
 
     .sortBy {
         position: relative;
-        left: 380px;
-        top: 20px;
+        float: right;
+        top: 45px;
+        
+    @media (max-width: 600px) {
+        position: initial;
+    }
 
         form select{
             width: 120px;
-        }
-        
-        @media (max-width: 600px) {
-            left: 200px;
         }
     }
 }
@@ -247,6 +263,7 @@ justify-content: center;
     .imgDiv {
         height: 200px;
         width: 100%;
+        min-width: 200px;
     }
 
     img {
@@ -262,11 +279,19 @@ justify-content: center;
         flex-direction: row;
         height: 63px;
         margin: auto 0;
+        
+        .listView {
+        width: 50%;
+        }
     }
 
     .productDetails {
         margin: auto 0 auto 30px;
         width: 300px;
+
+        @media (max-width: 600px) {
+            width: 123px;
+        }
     }
 
     .title, .price {
@@ -282,10 +307,17 @@ justify-content: center;
         font-size: 28px;
         cursor: pointer;
         
-    :hover {
-        color: #db1f1f;
+        @media (min-width: 720px) and (orientation:landscape) {
+            :hover {
+            color: #db1f1f;
     }
     }
+    }
+}
+
+        
+.addedToWishlist {
+    color: #db1f1f;
 }
 
 .pagination {
@@ -326,17 +358,22 @@ justify-content: center;
 
 const Products = () => {
 
-    const { products } = useContext(ProductContext);
+    const {
+        products,
+        isOnWishList,
+        toggleWishList
+    } = useContext(ProductContext);
 
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
     const closeSidebar = () => setSidebar(false);
-    
+
     const [listView, setlistView] = useState(true);
     const showListView = () => setlistView(true);
     const showGridView = () => setlistView(false);
-
-
+    
+    let page = 1;
+    let productsToShow = products.slice(0, page*6);
 
     return (
         <ProductsContainer>
@@ -353,7 +390,7 @@ const Products = () => {
                     <fieldset className="categories" id="categories">
                         <h3>Categories</h3>
                         <div>
-                            <input type="radio" name="category"/>All
+                            <input type="radio" name="category" />All
                         </div>
                         <div>
                             <input type="radio" name="category" value='smartphones' />Smartphones
@@ -365,19 +402,19 @@ const Products = () => {
                     <fieldset className="ratings" id="ratings">
                         <h3>Rating stars</h3>
                         <div>
-                            <input type="radio" name="ratings" value='1'/>1
+                            <input type="radio" name="ratings" value='1' />1
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='3'/>2
+                            <input type="radio" name="ratings" value='3' />2
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='3'/>3
+                            <input type="radio" name="ratings" value='3' />3
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='4'/>4
+                            <input type="radio" name="ratings" value='4' />4
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='5'/>5
+                            <input type="radio" name="ratings" value='5' />5
                         </div>
                     </fieldset>
                     <fieldset className="shipping" id="shipping">
@@ -413,12 +450,12 @@ const Products = () => {
                     </div>
                     <div className='cardGridContainer'>
                         {
-                            products.map(({ id, title, price, thumbnail }, index) => {
+                            productsToShow.map(({ id, title, price, thumbnail }, index) => {
                                 return (
                                     <div key={index} className={!listView ? 'card listView' : 'card'}>
                                         <div className="imgDiv">
                                             <Link to={`/products/product/${id}`}>
-                                            <img src={thumbnail} alt=''></img>
+                                                <img src={thumbnail} alt=''></img>
                                             </Link>
                                         </div>
                                         <div className="detailsContainer">
@@ -426,7 +463,7 @@ const Products = () => {
                                                 <div className="title">{title}</div>
                                                 <div className="price">${price}</div>
                                             </div>
-                                            <div className="wishList">&#10084;</div>
+                                            <div className={isOnWishList(id) ? 'wishList addedToWishlist' : 'wishList'} title="Add to Wish List" onClick={toggleWishList(id)}>&#10084;</div>
                                         </div>
                                     </div>
                                 )
@@ -434,15 +471,14 @@ const Products = () => {
                         }
                     </div>
                     <div className="pagination">
-                    <ul>
-                        <li className="active">1</li>
-                        <li>2</li>
-                        <li>3</li>
-                    </ul>
-                </div>
+                        <ul>
+                            <li className="active">1</li>
+                            <li>2</li>
+                            <li>3</li>
+                        </ul>
                     </div>
+                </div>
             </div>
-            {/* <div>{console.log(newProduct(data))}</div> */}
         </ProductsContainer>
     )
 }

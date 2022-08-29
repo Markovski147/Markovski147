@@ -12,18 +12,28 @@ const WhoAreWeContainer = styled.div`
         font-weight: bold;
         text-transform: uppercase;
         min-width: 520px;
+        
+        @media (max-width: 600px) {
+            min-width: 90%;
+        }
     }
     
     .text {
-        margin: 50px auto;
+        margin: 20px auto;
         max-width: 1000px;
-        padding: 0 20px;
-        min-width: 450px;
+        
+        @media (max-width: 992px) {
+            max-width: 550px;
+        }
+        
+        @media (max-width: 600px) {
+            width: 90%
+        }
     }
 
     .img-container {
         display: block;
-        width: 992px;
+        width: 1100px;
         margin: 0 auto;
 
         @media (max-width: 992px) {
@@ -31,7 +41,7 @@ const WhoAreWeContainer = styled.div`
         }
         
         @media (max-width: 600px) {
-            width: 490px;
+            width: 90%;
         }
     }
     
@@ -47,16 +57,20 @@ const WhoAreWeContainer = styled.div`
             margin: 20px 0;
 
             @media (max-width: 600px) {
-                width: 220px;
-                weight: 240px;
-                margin: 10px 0;
+                width: 90%;
+                height: auto;
+                margin: 10px auto;
             }
         }
         
 
         @media (max-width: 992px) {
             grid-template-columns: repeat(2, 240px);
-            justify-content: space-between;
+            justify-content: space-evenly;
+        }
+        
+        @media (max-width: 600px) {
+            grid-template-columns: repeat(2, auto);
         }
     
     }
