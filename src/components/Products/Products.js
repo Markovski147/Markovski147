@@ -321,7 +321,6 @@ justify-content: center;
 }
 
 .pagination {
-    width: 200px;
     
     ul {
     display: flex;
@@ -361,7 +360,13 @@ const Products = () => {
     const {
         products,
         isOnWishList,
-        toggleWishList
+        toggleWishList,
+        page,
+        switchPage,
+        productsToDisplay,
+        setProductsToDisplay,
+        currentCategory,
+        switchCategory
     } = useContext(ProductContext);
 
     const [sidebar, setSidebar] = useState(false);
@@ -371,9 +376,51 @@ const Products = () => {
     const [listView, setlistView] = useState(true);
     const showListView = () => setlistView(true);
     const showGridView = () => setlistView(false);
-    
-    let page = 1;
-    let productsToShow = products.slice(0, page*6);
+
+    let updatedProducts = [];
+    const updateProducts = (page) => () => {
+        updatedProducts = [...products];
+        updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
+        updatedProducts = updatedProducts.slice((6*page-6), (6*page));
+        console.log(updatedProducts);
+        switchPage(page);
+        setProductsToDisplay(updatedProducts);
+    }
+
+    const updatedProductsByCategory = (cat) => () => {
+        switchCategory(cat);
+        updatedProducts = [...products];
+        updatedProducts = updatedProducts.filter(item => item.category.includes(cat));
+        updatedProducts = updatedProducts.slice(0, 6);
+        console.log(updatedProducts);
+        switchPage(1);
+        setProductsToDisplay(updatedProducts);
+    }
+
+    const renderProduct = (items) => {
+        if (items === undefined) {
+            return <div>loading...</div>
+        } else {
+        return items.map(({ id, title, price, thumbnail }, index) => {
+            return (
+                <div key={index} className={!listView ? 'card listView' : 'card'}>
+                    <div className="imgDiv">
+                        <Link to={`/products/product/${id}`}>
+                            <img src={thumbnail} alt=''></img>
+                        </Link>
+                    </div>
+                    <div className="detailsContainer">
+                        <div className="productDetails">
+                            <div className="title">{title}</div>
+                            <div className="price">${price}</div>
+                        </div>
+                        <div className={isOnWishList(id) ? 'wishList addedToWishlist' : 'wishList'} title="Add to Wish List" onClick={toggleWishList(id)}>&#10084;</div>
+                    </div>
+                </div>
+            )
+        })
+    }
+    }
 
     return (
         <ProductsContainer>
@@ -390,13 +437,19 @@ const Products = () => {
                     <fieldset className="categories" id="categories">
                         <h3>Categories</h3>
                         <div>
-                            <input type="radio" name="category" />All
+                            <input type="radio" name="category" onClick={updatedProductsByCategory('')}/>All
                         </div>
                         <div>
-                            <input type="radio" name="category" value='smartphones' />Smartphones
+                            <input type="radio" name="category" value='smartphones' onClick={updatedProductsByCategory('smartphones')}/>Smartphones
                         </div>
                         <div>
-                            <input type="radio" name="category" value='fragrances' />Fragrances
+                            <input type="radio" name="category" value='laptops' onClick={updatedProductsByCategory('laptops')}/>Fragrances
+                        </div>
+                        <div>
+                            <input type="radio" name="category" value='fragrances' onClick={updatedProductsByCategory('fragrances')}/>Fragrances
+                        </div>
+                        <div>
+                            <input type="radio" name="category" value='groceries' onClick={updatedProductsByCategory('groceries')}/>Fragrances
                         </div>
                     </fieldset>
                     <fieldset className="ratings" id="ratings">
@@ -449,32 +502,15 @@ const Products = () => {
                         <img src={list} alt='list' className={!listView ? 'active' : ''} onClick={showGridView}></img>
                     </div>
                     <div className='cardGridContainer'>
-                        {
-                            productsToShow.map(({ id, title, price, thumbnail }, index) => {
-                                return (
-                                    <div key={index} className={!listView ? 'card listView' : 'card'}>
-                                        <div className="imgDiv">
-                                            <Link to={`/products/product/${id}`}>
-                                                <img src={thumbnail} alt=''></img>
-                                            </Link>
-                                        </div>
-                                        <div className="detailsContainer">
-                                            <div className="productDetails">
-                                                <div className="title">{title}</div>
-                                                <div className="price">${price}</div>
-                                            </div>
-                                            <div className={isOnWishList(id) ? 'wishList addedToWishlist' : 'wishList'} title="Add to Wish List" onClick={toggleWishList(id)}>&#10084;</div>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
+                        {renderProduct(productsToDisplay)}
                     </div>
                     <div className="pagination">
                         <ul>
-                            <li className="active">1</li>
-                            <li>2</li>
-                            <li>3</li>
+                            <li className={page === 1 ? "active" : ''} onClick={updateProducts(1)}>1</li>
+                            <li className={page === 2 ? "active" : ''} onClick={updateProducts(2)}>2</li>
+                            <li className={page === 3 ? "active" : ''} onClick={updateProducts(3)}>3</li>
+                            <li className={page === 4 ? "active" : ''} onClick={updateProducts(4)}>4</li>
+                            <li className={page === 5 ? "active" : ''} onClick={updateProducts(5)}>5</li>
                         </ul>
                     </div>
                 </div>
