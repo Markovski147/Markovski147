@@ -13,7 +13,10 @@ const ProductContext = createContext({
   setProductsToDisplay: () => { },
   currentCategory: [],
   switchCategory: () => { },
-  allCategories: []
+  currentRating: [],
+  switchRating: () => { },
+  currentSortBy: [],
+  switchSortBy: () => { }
 })
 
 export const ProductsContextProvider = ({ children }) => {
@@ -64,26 +67,24 @@ export const ProductsContextProvider = ({ children }) => {
   }
 
   const [currentCategory, setCategory] = useState('');
-  const [allCategories, setAllCategories] = useState([]);
 
   const switchCategory = (category) => {
     setCategory(category);
     console.log(category);
   }
 
-  const renderCategories = products.map(({ category }, index) => {
-    return category;
-  })
+  const [currentRating, setRating] = useState('');
 
-  // const filteredCategories = renderCategories.filter(el => {
-  //   if (renderCategories.includes(el)) {
-  //     return renderCategories.remove(el);
-  //   }
-  // }
-  // )
+  const switchRating = (rating) => {
+    setRating(rating);
+    console.log(rating);
+  }
 
-  // setAllCategories([...filteredCategories]);
-
+  const [currentSortBy, setCurrentSortBy] = useState([]);
+  const switchSortBy = (sortBy) => {
+    setCurrentSortBy(sortBy);
+    console.log(currentSortBy);
+  }
 
   const contextValues = {
     products: products,
@@ -97,7 +98,10 @@ export const ProductsContextProvider = ({ children }) => {
     setProductsToDisplay: setProductsToDisplay,
     currentCategory: currentCategory,
     switchCategory: switchCategory,
-    allCategories: allCategories
+    currentRating: currentRating,
+    switchRating: switchRating,
+    currentSortBy: currentSortBy,
+    switchSortBy: switchSortBy
   };
 
   return (

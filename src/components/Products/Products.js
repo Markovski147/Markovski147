@@ -23,7 +23,7 @@ justify-content: center;
     }
     
     @media (max-width: 600px) {
-        width: fit-content;
+        width: 90%;
 }
 
 .sideBarContainer {
@@ -148,10 +148,11 @@ justify-content: center;
     padding: 30px;
     
     @media (max-width: 600px) {
-        width: 360px;
+        width: 90%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        padding: 30px 5%;
     }
 
     h2 {
@@ -186,21 +187,19 @@ justify-content: center;
     display: flex;
     justify-content: end;
     margin-top: 20px;
-    
-    @media (max-width: 600px) {
-        width: 420px;
-    }
+
+    .showSidebarDiv{
+        width:100%;
 
     svg {
-        position: relative;
-        font-size: 30px;
-        margin: 0 0 10px 10px;
-        right: 510px;
+        font-size: 32px;
         cursor: pointer;
         opacity: 70%;
         
+    }
+        
         @media (max-width: 600px) {
-            right: 312px;
+            right: 251px;
         }
         
         :hover {
@@ -238,8 +237,8 @@ justify-content: center;
     justify-content: space-between;
     
     @media (max-width: 600px) {
-        width: 420px;
-        grid-template-columns: repeat(2, 200px);
+        width: 100%;
+        grid-template-columns: repeat(2, 48%);
     }
 }
 
@@ -250,20 +249,28 @@ justify-content: center;
         background: #2E2E30;
         border-radius: 5px;
         margin-bottom: 30px;
-        height: 300px;
+        height: 80%;
     }
 
         .listView {
+            width: 100%;
             flex-direction: row;
             grid-auto-rows: auto;
             grid-column: 1/3;
-            height: 200px;
-    }
+            height: 70%;
+        }
+
+            .listView .imgDiv {
+                height: 100%
+            }
 
     .imgDiv {
-        height: 200px;
+        height: 67%;
         width: 100%;
-        min-width: 200px;
+    }
+
+    .listView .imgDiv {        
+        width: 50%;
     }
 
     img {
@@ -277,20 +284,31 @@ justify-content: center;
     .detailsContainer {
         display: flex;
         flex-direction: row;
-        height: 63px;
+        min-height: 63px;
         margin: auto 0;
-        
-        .listView {
+        height: 60%;
+
+        @media (max-width: 600px) {
+            height: 30%;
+            padding: 0 10%;
+        }
+    }
+
+    .listView .detailsContainer {
         width: 50%;
+        padding: 0;
+
+        .productDetails{
+            width: 50%;
         }
     }
 
     .productDetails {
-        margin: auto 0 auto 30px;
-        width: 300px;
-
-        @media (max-width: 600px) {
-            width: 123px;
+        margin: auto 0 auto 10%;
+        width: 100%;
+        div {
+            font-size: 14px;
+            font-weight: normal;
         }
     }
 
@@ -302,14 +320,23 @@ justify-content: center;
 
     .wishList {
         position: relative;
-        margin: auto 20px;
+        margin: auto 5%;
         float: right;
         font-size: 28px;
         cursor: pointer;
         
-        @media (min-width: 720px) and (orientation:landscape) {
+        @media (max-width: 600px) {
+            text-align: end;
+            width: 100%;
             :hover {
             color: #db1f1f;
+            
+        }
+
+        @media (max-width: 720px) and (orientation:landscape) {
+            :hover {
+            color: #db1f1f;
+            
     }
     }
     }
@@ -326,7 +353,7 @@ justify-content: center;
     display: flex;
     height: 50px;
     list-style: none;
-    margin: 0;
+    margin: 5% 0;
     padding: 0;
     
     .active {
@@ -366,7 +393,11 @@ const Products = () => {
         productsToDisplay,
         setProductsToDisplay,
         currentCategory,
-        switchCategory
+        switchCategory,
+        currentRating,
+        switchRating,
+        currentSortBy,
+        switchSortBy
     } = useContext(ProductContext);
 
     const [sidebar, setSidebar] = useState(false);
@@ -377,19 +408,48 @@ const Products = () => {
     const showListView = () => setlistView(true);
     const showGridView = () => setlistView(false);
 
+    const sort = (list, sortBy = currentSortBy) => {
+        if (sortBy === 'byName') {
+            list.sort((a, b) => {
+                let fa = a.title.toLowerCase(),
+                    fb = b.title.toLowerCase();
+            
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
+        } else if (sortBy === 'byPrice') {
+            list.sort((a, b) => {
+                return a.price - b.price;
+            });
+        } else if (sortBy === 'byRating') {
+            list.sort((a, b) => {
+                return a.rating - b.rating;
+            });
+        }
+    }
+
     let updatedProducts = [];
     const updateProducts = (page) => () => {
         updatedProducts = [...products];
+        sort(updatedProducts);
         updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
-        updatedProducts = updatedProducts.slice((6*page-6), (6*page));
+        updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+        updatedProducts = updatedProducts.slice((6 * page - 6), (6 * page));
         console.log(updatedProducts);
         switchPage(page);
         setProductsToDisplay(updatedProducts);
     }
 
-    const updatedProductsByCategory = (cat) => () => {
+    const updateProductsByCategory = (cat) => () => {
         switchCategory(cat);
         updatedProducts = [...products];
+        sort(updatedProducts);
+        updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
         updatedProducts = updatedProducts.filter(item => item.category.includes(cat));
         updatedProducts = updatedProducts.slice(0, 6);
         console.log(updatedProducts);
@@ -397,29 +457,70 @@ const Products = () => {
         setProductsToDisplay(updatedProducts);
     }
 
+    const updateProductsByRating = (rating) => () => {
+        updatedProducts = [...products];
+        sort(updatedProducts);
+        updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
+        updatedProducts = updatedProducts.filter(item => item.rating > rating);
+        updatedProducts = updatedProducts.slice(0, 6);
+        console.log(updatedProducts);
+        switchRating(rating);
+        setProductsToDisplay(updatedProducts);
+    }
+
+    const renderSortForm = () => {
+
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            const sortBy = event.target.value;
+            updatedProducts = [...products];
+            sort(updatedProducts, sortBy);
+            updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
+            updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+            console.log(sortBy, currentSortBy);
+            setProductsToDisplay(updatedProducts);
+            switchSortBy(sortBy);
+        }
+        const renderForm = (
+            <form onChange={handleSubmit}>
+                <label>Sort by: </label>
+                <select id="cars" name="cars">
+                    <option value=""></option>
+                    <option value="byName">Name</option>
+                    <option value="byPrice">Price</option>
+                    <option value="byRating">Rating</option>
+                </select>
+            </form>
+        )
+        return (
+            <>{renderForm}</>
+        )
+    }
+
     const renderProduct = (items) => {
         if (items === undefined) {
             return <div>loading...</div>
         } else {
-        return items.map(({ id, title, price, thumbnail }, index) => {
-            return (
-                <div key={index} className={!listView ? 'card listView' : 'card'}>
-                    <div className="imgDiv">
-                        <Link to={`/products/product/${id}`}>
-                            <img src={thumbnail} alt=''></img>
-                        </Link>
-                    </div>
-                    <div className="detailsContainer">
-                        <div className="productDetails">
-                            <div className="title">{title}</div>
-                            <div className="price">${price}</div>
+            return items.slice(0, 6).map(({ id, title, price, thumbnail, rating }, index) => {
+                return (
+                    <div key={index} className={!listView ? 'card listView' : 'card'}>
+                        <div className="imgDiv">
+                            <Link to={`/products/product/${id}`}>
+                                <img src={thumbnail} alt=''></img>
+                            </Link>
                         </div>
-                        <div className={isOnWishList(id) ? 'wishList addedToWishlist' : 'wishList'} title="Add to Wish List" onClick={toggleWishList(id)}>&#10084;</div>
+                        <div className="detailsContainer">
+                            <div className="productDetails">
+                                <div className="title">Name: {title}</div>
+                                <div className="price">Price ${price}</div>
+                                <div className="price">Rating {rating} &#11088;</div>
+                            </div>
+                            <div className={isOnWishList(id) ? 'wishList addedToWishlist' : 'wishList'} title="Add to Wish List" onClick={toggleWishList(id)}>&#10084;</div>
+                        </div>
                     </div>
-                </div>
-            )
-        })
-    }
+                )
+            })
+        }
     }
 
     return (
@@ -437,37 +538,37 @@ const Products = () => {
                     <fieldset className="categories" id="categories">
                         <h3>Categories</h3>
                         <div>
-                            <input type="radio" name="category" onClick={updatedProductsByCategory('')}/>All
+                            <input type="radio" name="category" value='' onClick={updateProductsByCategory('')} />All
                         </div>
                         <div>
-                            <input type="radio" name="category" value='smartphones' onClick={updatedProductsByCategory('smartphones')}/>Smartphones
+                            <input type="radio" name="category" value='smartphones' onClick={updateProductsByCategory('smartphones')} />Smartphones
                         </div>
                         <div>
-                            <input type="radio" name="category" value='laptops' onClick={updatedProductsByCategory('laptops')}/>Fragrances
+                            <input type="radio" name="category" value='laptops' onClick={updateProductsByCategory('laptops')} />Laptops
                         </div>
                         <div>
-                            <input type="radio" name="category" value='fragrances' onClick={updatedProductsByCategory('fragrances')}/>Fragrances
+                            <input type="radio" name="category" value='fragrances' onClick={updateProductsByCategory('fragrances')} />Fragrances
                         </div>
                         <div>
-                            <input type="radio" name="category" value='groceries' onClick={updatedProductsByCategory('groceries')}/>Fragrances
+                            <input type="radio" name="category" value='groceries' onClick={updateProductsByCategory('groceries')} />Groceries
                         </div>
                     </fieldset>
                     <fieldset className="ratings" id="ratings">
                         <h3>Rating stars</h3>
                         <div>
-                            <input type="radio" name="ratings" value='1' />1
+                            <input type="radio" name="ratings" value='1' onClick={updateProductsByRating(1)} />1
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='3' />2
+                            <input type="radio" name="ratings" value='3' onClick={updateProductsByRating(2)} />2
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='3' />3
+                            <input type="radio" name="ratings" value='3' onClick={updateProductsByRating(3)} />3
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='4' />4
+                            <input type="radio" name="ratings" value='4' onClick={updateProductsByRating(4)} />4
                         </div>
                         <div>
-                            <input type="radio" name="ratings" value='5' />5
+                            <input type="radio" name="ratings" value='5' onClick={updateProductsByRating(5)} />5
                         </div>
                     </fieldset>
                     <fieldset className="shipping" id="shipping">
@@ -485,19 +586,11 @@ const Products = () => {
                         <h2>Products</h2>
                         <span>Showing 1-16 of 29 results</span>
                         <div className="sortBy">
-                            <form>
-                                <label>Sort by: </label>
-                                <select id="cars" name="cars">
-                                    <option value=""></option>
-                                    <option value="byName">Name</option>
-                                    <option value="byPrice">Price</option>
-                                    <option value="byRating">Rating</option>
-                                </select>
-                            </form>
+                            {renderSortForm()}
                         </div>
                     </div>
                     <div className="gridIcons">
-                        <FaBars onClick={showSidebar} />
+                        <div className="showSidebarDiv"><FaBars onClick={showSidebar} /></div>
                         <img src={grid} alt='grid' className={listView ? 'active' : ''} onClick={showListView}></img>
                         <img src={list} alt='list' className={!listView ? 'active' : ''} onClick={showGridView}></img>
                     </div>
