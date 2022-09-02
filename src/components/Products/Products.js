@@ -46,6 +46,9 @@ justify-content: center;
     
     @media (max-width: 600px) {
         width: 100%;
+        overflow: scroll;
+        height: 90%;
+        padding: 10%;
       }
 
     .side-close {
@@ -260,17 +263,14 @@ justify-content: center;
             height: 70%;
         }
 
-            .listView .imgDiv {
-                height: 100%
-            }
-
     .imgDiv {
         height: 67%;
         width: 100%;
     }
 
-    .listView .imgDiv {        
-        width: 50%;
+    .listView .imgDiv {  
+        height: 100%;      
+        width: 75%;
     }
 
     img {
@@ -287,28 +287,43 @@ justify-content: center;
         min-height: 63px;
         margin: auto 0;
         height: 60%;
+        overflow: hidden;
 
         @media (max-width: 600px) {
             height: 30%;
-            padding: 0 10%;
+            padding: 0;
         }
     }
 
     .listView .detailsContainer {
-        width: 50%;
+        width: 100%;
         padding: 0;
+        height: 70%;
 
         .productDetails{
-            width: 50%;
+            width: 60%;
+            margin: 5%;
+            height: 100%;
         }
     }
 
     .productDetails {
         margin: auto 0 auto 10%;
         width: 100%;
+        
+        @media (max-width: 600px) {
+            margin: auto 5% auto 10%;
+        
+        }
+
         div {
             font-size: 14px;
             font-weight: normal;
+            
+        @media (max-width: 600px) {
+            font-size: 2.5vw;
+            max-font-size: 14px;
+        }
         }
     }
 
@@ -320,16 +335,20 @@ justify-content: center;
 
     .wishList {
         position: relative;
-        margin: auto 5%;
+        margin: auto 10% auto 0;
         float: right;
         font-size: 28px;
         cursor: pointer;
-        
-        @media (max-width: 600px) {
-            text-align: end;
-            width: 100%;
-            :hover {
+        width: 40%;
+        text-align: end;
+
+        :hover {
             color: #db1f1f;
+        }
+        
+        @media (max-width: 600px) {            
+            :hover {
+            color: #;
             
         }
 
@@ -345,6 +364,9 @@ justify-content: center;
         
 .addedToWishlist {
     color: #db1f1f;
+    :hover {
+        color: #fff;
+    }
 }
 
 .pagination {
@@ -535,7 +557,7 @@ const Products = () => {
                             <div>Price: $0 - $1,000</div>
                         </output>
                     </div>
-                    <fieldset className="categories" id="categories">
+                    <fieldset className="categories" id="categories" onChange={(closeSidebar)}>
                         <h3>Categories</h3>
                         <div>
                             <input type="radio" name="category" value='' onClick={updateProductsByCategory('')} />All
@@ -553,7 +575,7 @@ const Products = () => {
                             <input type="radio" name="category" value='groceries' onClick={updateProductsByCategory('groceries')} />Groceries
                         </div>
                     </fieldset>
-                    <fieldset className="ratings" id="ratings">
+                    <fieldset className="ratings" id="ratings" onChange={(closeSidebar)}>
                         <h3>Rating stars</h3>
                         <div>
                             <input type="radio" name="ratings" value='1' onClick={updateProductsByRating(1)} />1
@@ -571,7 +593,7 @@ const Products = () => {
                             <input type="radio" name="ratings" value='5' onClick={updateProductsByRating(5)} />5
                         </div>
                     </fieldset>
-                    <fieldset className="shipping" id="shipping">
+                    <fieldset className="shipping" id="shipping" onChange={(closeSidebar)}>
                         <h3>Shipping</h3>
                         <div>
                             <input type="radio" name="shipping" />Free
