@@ -4,10 +4,15 @@ import notFound from './../assets/not-found.jpg'
 const NotFoundContainer = styled.div`
     display: flex;
     justify-content: center;
+    width: 100%;
+
+    .imgDiv {
+      width: 90%;
+      max-width: 800px;
+    }
 
     img {
-        width: 800px;
-        heigth: 800px;
+        width: 100%;
     }
   `;
 
@@ -15,7 +20,9 @@ const NotFoundContainer = styled.div`
 const NotFound = () => {
     return (
       <NotFoundContainer>
-        <img src={notFound} alt=''></img>
+        <div className='imgDiv'>
+        <img src={notFound} alt=''/>
+        </div>
       </NotFoundContainer>
     )
   }

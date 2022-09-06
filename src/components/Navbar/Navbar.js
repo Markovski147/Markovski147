@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import logo from '../../assets/logo.svg';
 import NavbarButtons from './NavbarButtons';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { NavLink, Link } from "react-router-dom";
+import AuthContext from '../../store/auth-context';
 
 const NavBarContainer = styled.div`
   display: flex;
@@ -144,6 +145,10 @@ const NavBarContainer = styled.div`
       .active {
         font-weight: bold;
       }
+
+      .hidden {
+        display: none;
+      }
     }
   }
 `;
@@ -152,6 +157,8 @@ function NavBar({
   navItems = [],
 }) {
   
+  const { isLoggedIn } = useContext(AuthContext);
+
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
@@ -171,9 +178,9 @@ function NavBar({
         </div>
         <ul className='nav-links'>
           {
-            navItems.map(({ label, url, id }, index) => {
+            navItems.map(({ label, url, id, isPrivate }, index) => {
               return (
-                <NavLink key={index} activeClassName='active' to={url} onClick={(closeSidebar)}>{label}</NavLink>
+                <NavLink className={!isLoggedIn && isPrivate ? 'hidden' : ''} key={index} activeClassName='active' to={url} onClick={(closeSidebar)}>{label}</NavLink>
               )
             })
           }

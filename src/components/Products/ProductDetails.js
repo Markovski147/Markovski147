@@ -85,8 +85,8 @@ const ProductDetails = () => {
 
     const { products } = useContext(ProductContext);
 
-    const curId = window.location.pathname.slice(-1);
-    const product = products[curId - 1];
+    const curId = window.location.pathname.slice(-2);
+    const product = products[curId.replace('/', '') - 1];
 
     return (
         <ProductDetailsContainer>

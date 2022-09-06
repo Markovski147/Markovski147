@@ -4,8 +4,10 @@ import grid from '../../assets/grid.svg'
 import list from '../../assets/list.svg'
 import { FaBars } from "react-icons/fa";
 import ProductContext from '../../store/productsList';
+import CartContext from "../../store/reducers/cart";
 import { useContext, useState } from 'react';
 import { Link } from "react-router-dom";
+import AuthContext from "../../store/auth-context";
 
 const ProductsContainer = styled.div`
 display: flex;
@@ -251,7 +253,6 @@ justify-content: center;
         justify-content: flex-start;
         background: #2E2E30;
         border-radius: 5px;
-        margin-bottom: 30px;
         height: 80%;
     }
 
@@ -260,7 +261,6 @@ justify-content: center;
             flex-direction: row;
             grid-auto-rows: auto;
             grid-column: 1/3;
-            height: 70%;
         }
 
     .imgDiv {
@@ -286,24 +286,20 @@ justify-content: center;
         flex-direction: row;
         min-height: 63px;
         margin: auto 0;
-        height: 60%;
-        overflow: hidden;
-
-        @media (max-width: 600px) {
-            height: 30%;
-            padding: 0;
-        }
+        height: 100%;
+        justify-content: center;
+        align-items: center;
     }
 
     .listView .detailsContainer {
         width: 100%;
         padding: 0;
-        height: 70%;
 
         .productDetails{
-            width: 60%;
             margin: 5%;
-            height: 100%;
+            display:flex;
+            flex-direction: column;
+            justify-content: space-evenly;
         }
     }
 
@@ -321,7 +317,7 @@ justify-content: center;
             font-weight: normal;
             
         @media (max-width: 600px) {
-            font-size: 2.5vw;
+            font-size: 2.3vw;
             max-font-size: 14px;
         }
         }
@@ -333,40 +329,29 @@ justify-content: center;
         font-size: 14px;
     }
 
-    .wishList {
+    .hidden {
+        display: none;
+    }
+
+    .cart {
         position: relative;
         margin: auto 10% auto 0;
         float: right;
         font-size: 28px;
         cursor: pointer;
-        width: 40%;
+        width: 10%;
         text-align: end;
 
-        :hover {
-            color: #db1f1f;
-        }
-        
-        @media (max-width: 600px) {            
-            :hover {
-            color: #;
-            
-        }
-
-        @media (max-width: 720px) and (orientation:landscape) {
-            :hover {
-            color: #db1f1f;
-            
+        @media (max-width: 600px) {
+            font-size: 5vw;
     }
     }
     }
 }
 
         
-.addedToWishlist {
+.addedTocart {
     color: #db1f1f;
-    :hover {
-        color: #fff;
-    }
 }
 
 .pagination {
@@ -375,14 +360,11 @@ justify-content: center;
     display: flex;
     height: 50px;
     list-style: none;
-    margin: 5% 0;
+    margin: 5% 0 0 0;
     padding: 0;
     
     .active {
         background: #db1f1f;
-        :hover {
-            background: #7f7f7f;
-        }
     }
     }
     
@@ -401,16 +383,51 @@ justify-content: center;
     }
     }
 }
+    .alert {
+        position: absolute;
+        border-radius: 5px;
+        padding: 2vw;
+        background-color: white;
+        color: black;
+        font-size: 14px;
+        max-width: 42%;
+        transition: 0.5s;
+        
+        @media (max-width: 600px) {
+            font-size: 2.5vw;
+    }
+      }
+      
+      .closebtn {
+        margin-left: 15px;
+        color: black;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.5s;
+      }
+      
+      .closebtn:hover {
+        color: gray;
+      }
 
+      .hideAlert {
+        position: absolute;
+        overflow: hidden;
+        transition: 0.5s;
+        width: 40%;
+      }
 `;
 
 const Products = () => {
 
+    const { isLoggedIn } = useContext(AuthContext);
+
     const {
         products,
-        isOnWishList,
-        toggleWishList,
-        page,
+        currentPage,
         switchPage,
         productsToDisplay,
         setProductsToDisplay,
@@ -421,6 +438,13 @@ const Products = () => {
         currentSortBy,
         switchSortBy
     } = useContext(ProductContext);
+
+    const {
+        toggleCart,
+        isInCart,
+        renderError,
+        errorMsg
+    } = useContext(CartContext);
 
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
@@ -435,7 +459,6 @@ const Products = () => {
             list.sort((a, b) => {
                 let fa = a.title.toLowerCase(),
                     fb = b.title.toLowerCase();
-            
                 if (fa < fb) {
                     return -1;
                 }
@@ -462,7 +485,6 @@ const Products = () => {
         updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
         updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
         updatedProducts = updatedProducts.slice((6 * page - 6), (6 * page));
-        console.log(updatedProducts);
         switchPage(page);
         setProductsToDisplay(updatedProducts);
     }
@@ -474,7 +496,6 @@ const Products = () => {
         updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
         updatedProducts = updatedProducts.filter(item => item.category.includes(cat));
         updatedProducts = updatedProducts.slice(0, 6);
-        console.log(updatedProducts);
         switchPage(1);
         setProductsToDisplay(updatedProducts);
     }
@@ -485,8 +506,8 @@ const Products = () => {
         updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
         updatedProducts = updatedProducts.filter(item => item.rating > rating);
         updatedProducts = updatedProducts.slice(0, 6);
-        console.log(updatedProducts);
         switchRating(rating);
+        switchPage(1);
         setProductsToDisplay(updatedProducts);
     }
 
@@ -499,9 +520,9 @@ const Products = () => {
             sort(updatedProducts, sortBy);
             updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
             updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
-            console.log(sortBy, currentSortBy);
             setProductsToDisplay(updatedProducts);
             switchSortBy(sortBy);
+            switchPage(1);
         }
         const renderForm = (
             <form onChange={handleSubmit}>
@@ -523,7 +544,7 @@ const Products = () => {
         if (items === undefined) {
             return <div>loading...</div>
         } else {
-            return items.slice(0, 6).map(({ id, title, price, thumbnail, rating }, index) => {
+            return items.slice(0, 6).map(({ id, title, description, price, thumbnail, rating }, index) => {
                 return (
                     <div key={index} className={!listView ? 'card listView' : 'card'}>
                         <div className="imgDiv">
@@ -533,16 +554,33 @@ const Products = () => {
                         </div>
                         <div className="detailsContainer">
                             <div className="productDetails">
-                                <div className="title">Name: {title}</div>
-                                <div className="price">Price ${price}</div>
-                                <div className="price">Rating {rating} &#11088;</div>
+                                <div className="title">{title}</div>
+                                <div className={listView ? 'hidden' : ''}>DESCRIPTION: {description}</div>
+                                <div className="price">${price}</div>
+                                <div className="price">{rating}&#11088;</div>
                             </div>
-                            <div className={isOnWishList(id) ? 'wishList addedToWishlist' : 'wishList'} title="Add to Wish List" onClick={toggleWishList(id)}>&#10084;</div>
+                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title="Add to Wish List"onClick={toggleCart(products, id, isLoggedIn)}>
+                            &#10084;</div>
+                            <div className={errorMsg ? "alert" : 'hideAlert'}>{renderError('notLoggedIn')}</div>
                         </div>
                     </div>
                 )
             })
         }
+    }
+    
+    const renderPagination = () => {
+        updatedProducts = [...products];
+        sort(updatedProducts);
+        updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
+        updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+        let pages = [...Array(Math.ceil(updatedProducts.length/6+1)).keys()];
+        pages.splice(0,1);
+        return pages.map((index) => {
+            return (
+                <li key={index} className={currentPage === index ? "active" : ''} onClick={updateProducts(index)}>{index}</li>
+            )
+        })
     }
 
     return (
@@ -552,7 +590,7 @@ const Products = () => {
                     <div className='side-close' onClick={(closeSidebar)}>&#x2716;</div>
                     <div className="sortByPrice">
                         <h3>Price</h3>
-                        <input type="range" name="price" id="price" min="0" max="200000" step="1" value="100000"></input>
+                        <input type="range" name="price" id="price" min="0" max="200000" step="1" ></input>
                         <output className="price-output">
                             <div>Price: $0 - $1,000</div>
                         </output>
@@ -621,11 +659,7 @@ const Products = () => {
                     </div>
                     <div className="pagination">
                         <ul>
-                            <li className={page === 1 ? "active" : ''} onClick={updateProducts(1)}>1</li>
-                            <li className={page === 2 ? "active" : ''} onClick={updateProducts(2)}>2</li>
-                            <li className={page === 3 ? "active" : ''} onClick={updateProducts(3)}>3</li>
-                            <li className={page === 4 ? "active" : ''} onClick={updateProducts(4)}>4</li>
-                            <li className={page === 5 ? "active" : ''} onClick={updateProducts(5)}>5</li>
+                            {renderPagination()}
                         </ul>
                     </div>
                 </div>

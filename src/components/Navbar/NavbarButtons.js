@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import search from '../../assets/search.svg';
-import cart from '../../assets/cart.svg';
+import cartIcon from '../../assets/cart.svg';
 import user from '../../assets/user.svg';
 import { Link } from "react-router-dom";
 import { useContext } from 'react';
-import ProductContext from '../../store/productsList';
+import CartContext from '../../store/reducers/cart';
+import AuthContext from '../../store/auth-context';
 
 const NavbarButtonsContainer = styled.div`
   display: flex;
@@ -36,9 +37,11 @@ const NavbarButtonsContainer = styled.div`
 `;
 
 // TODO: Implmenet Link component for all navigation buttons
-const NavbarButtons = ({ isLoggedIn }) => {
+const NavbarButtons = () => {
+  
+  const { isLoggedIn } = useContext(AuthContext);
 
-  const {wishListProducts} = useContext(ProductContext);
+  const {cartProducts} = useContext(CartContext);
 
   return (
     <NavbarButtonsContainer>
@@ -46,8 +49,8 @@ const NavbarButtons = ({ isLoggedIn }) => {
         <img src={search} alt='Search' />
       </div>
       <div className='cart-btn btn-container'>
-        <img src={cart} alt='Cart' />
-        <span className='cart-values'>{wishListProducts}</span>
+        <img src={cartIcon} alt='Cart' />
+        <span className='cart-values'>{cartProducts}</span>
       </div>
       {isLoggedIn ? (
         <button className='auth-btn btn-container'>

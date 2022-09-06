@@ -13,5 +13,6 @@ export const NAV_ITEMS = [{
 }, {
   id: 'checkout',
   label: 'Checkout',
-  url: '/checkout'
+  url: '/checkout',
+  isPrivate: true
 }];
