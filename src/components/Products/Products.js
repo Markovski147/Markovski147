@@ -341,6 +341,7 @@ justify-content: center;
         cursor: pointer;
         width: 10%;
         text-align: end;
+        color: #fff;
 
         @media (max-width: 600px) {
             font-size: 5vw;
@@ -350,7 +351,7 @@ justify-content: center;
 }
 
 .addedTocart {
-    color: #fff;
+    color: #db1f1f;
 }
 
 .pagination {

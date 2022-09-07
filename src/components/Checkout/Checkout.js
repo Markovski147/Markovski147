@@ -90,16 +90,19 @@ align-items: center;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    width: 25%;
+    width: 35%;
 
     span{
-      font-size: 2em;
+      font-size: 2.5em;
       font-weight: 300;
       cursor: pointer;
+      :hover {
+        opacity: 70%;
+      }
     }
 
     .quantity {
-      font-size: 1em;
+      font-size: 1.5em;
       cursor: default;
     }
   }
@@ -188,7 +191,7 @@ align-items: center;
   h5 {
     font-size: 2vw;
   }
-  
+
   .summary {
     width: 70%;
   }
@@ -197,6 +200,15 @@ align-items: center;
     width: 40%;
   }
 
+  .quantityContainer {
+    span {
+      font-size: 5vw;
+    }
+    
+    .quantity{
+      font-size: 3vw;      
+    }
+  }
   }
 `
 
