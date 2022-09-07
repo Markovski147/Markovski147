@@ -349,9 +349,8 @@ justify-content: center;
     }
 }
 
-        
 .addedTocart {
-    color: #db1f1f;
+    color: #fff;
 }
 
 .pagination {
@@ -441,9 +440,7 @@ const Products = () => {
 
     const {
         toggleCart,
-        isInCart,
-        renderError,
-        errorMsg
+        isInCart
     } = useContext(CartContext);
 
     const [sidebar, setSidebar] = useState(false);
@@ -559,9 +556,8 @@ const Products = () => {
                                 <div className="price">${price}</div>
                                 <div className="price">{rating}&#11088;</div>
                             </div>
-                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title="Add to Wish List"onClick={toggleCart(products, id, isLoggedIn)}>
+                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title="Add to Wish List" onClick={toggleCart(products, id, isLoggedIn)}>
                             &#10084;</div>
-                            <div className={errorMsg ? "alert" : 'hideAlert'}>{renderError('notLoggedIn')}</div>
                         </div>
                     </div>
                 )

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import img from '../../assets/no-img.gif'
+import { useContext } from 'react';
+import CartContext from '../../store/reducers/cart';
+
 
 const CheckoutContainer = styled.div`
 display: flex;
@@ -14,6 +16,7 @@ align-items: center;
 }
   h2 {
     text-transform: uppercase;
+    font-weight: 800;
   }
 
   .headerContainer {
@@ -31,13 +34,14 @@ align-items: center;
 
   h3 {
     text-transform: uppercase;
+    font-weight: 800;
   }
 
   .orderDetailsHeader {
     display: flex;
     flex-direction: row;
     align-items: end;
-    justify-content: space-evenly;
+    justify-content: space-around;
     width: 60%;
     padding: 1.5em 0;
   }
@@ -63,10 +67,13 @@ align-items: center;
 
     img {
       width: 150px;
+      object-fit: cover;
+      aspect-ratio: 4/3;
     }
 
     h3 {
       margin-left: 1em;
+      font-weight: 700;
     }
   }
 
@@ -75,8 +82,26 @@ align-items: center;
     flex-direction: row;
     width: 60%;
     padding: 1.5em 0;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .quantityContainer {
+    display: flex;
     justify-content: space-evenly;
     align-items: center;
+    width: 25%;
+
+    span{
+      font-size: 2em;
+      font-weight: 300;
+      cursor: pointer;
+    }
+
+    .quantity {
+      font-size: 1em;
+      cursor: default;
+    }
   }
 
   .orderSummaryHeader{
@@ -90,9 +115,19 @@ align-items: center;
     flex-direction: row;
   }
 
-  span, h4 {
-    font-weight: 700;
+  h4 {
+    font-weight: 800;
     text-transform: uppercase;
+  }
+
+  h5 {
+    font-weight: 400;
+    text-transform: uppercase;
+    color: gray;
+    border-right: 1px solid white;;
+    margin: 0;
+    width: 40%;
+    padding: 1em 0;
   }
 
   .orderSummaryContainer {
@@ -100,7 +135,6 @@ align-items: center;
     flex-direction: column;
     width: 40%;
     border-right: 1px solid;
-    padding: 1em 0 2em 0;
     align-items: start;
   }
   
@@ -115,7 +149,6 @@ align-items: center;
     display: flex;
     flex-direction: column;
     width: 60%;
-    padding: 1em 0 2em 0;
     align-items: end;
   }
 
@@ -125,9 +158,89 @@ align-items: center;
     justify-content: space-between;
     width: 30%;
   }
+
+  @media (max-width: 992px) {
+    .mainContainer {
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .productCard {
+    img {
+      width: 40%;
+    }
+
+  }
+
+  h2 {
+    font-size: 3.2vw;
+  }
+    
+  h3 {
+    font-size: 2.4vw;
+  }
+
+  h4 {
+    font-size: 2.2vw;
+  }
+
+  h5 {
+    font-size: 2vw;
+  }
+  
+  .summary {
+    width: 70%;
+  }
+
+  .total {
+    width: 40%;
+  }
+
+  }
 `
 
 const Checkout = () => {
+  const {
+    cart,
+    changeQuantity
+  } = useContext(CartContext);
+
+const renderProducts = (cart) => {
+  if (cart === undefined) {
+    return <div>Your cart is empty.</div>
+} else {
+  return cart.map(({ id, title, price, thumbnail, quantity }, index) => {
+    return (
+      <div key={index} className='product'>
+        <div className='productCard'>
+          <img src={thumbnail} alt='product'></img>
+          <h3>{title}</h3>
+        </div>
+        <div className='productOptions'>
+          <span>/</span>
+          <div className='quantityContainer'>
+          <span onClick={changeQuantity(id, '-')}>-</span><span className='quantity'>{quantity}</span><span onClick={changeQuantity(id, '+')}>+</span>
+          </div>
+          <span>${price*quantity}</span>
+        </div>
+      </div>
+    )
+    })
+  }
+}
+
+const totalPrice = (cart) => {
+  let total = 0;
+  cart.map(({price, quantity}) => {
+    return total = total + price*quantity;
+  })
+  return (
+    <>
+    <h4>${total}</h4>
+    </>
+  )
+}
 
   return (
     <CheckoutContainer>
@@ -144,57 +257,26 @@ const Checkout = () => {
           </div>
         </div>
         <div className='productCardsContainer'>
-          <div className='product'>
-            <div className='productCard'>
-              <img src={img} alt='product'></img>
-              <h3>Product</h3>
-            </div>
-            <div className='productOptions'>
-              <span>10</span>
-              <span>- 1 +</span>
-              <span>$100</span>
-            </div>
-          </div>
-          <div className='product'>
-            <div className='productCard'>
-              <img src={img} alt='product'></img>
-              <h3>Product</h3>
-            </div>
-            <div className='productOptions'>
-              <span>10</span>
-              <span>- 1 +</span>
-              <span>$100</span>
-            </div>
-          </div>
-          <div className='product'>
-            <div className='productCard'>
-              <img src={img} alt='product'></img>
-              <h3>Product</h3>
-            </div>
-            <div className='productOptions'>
-              <span>10</span>
-              <span>- 1 +</span>
-              <span>$100</span>
-            </div>
-          </div>
+          {renderProducts(cart)}
         </div>
         <div className='orderSummaryHeader'>
           <h4>Order summary</h4>
         </div>
         <div className='summaryMainContainer'>
-        <div className='orderSummaryContainer'>
-          <div className='summary'>
-            <span >Sub total:</span>
-            <span>$100</span>
+          <div className='orderSummaryContainer'>
+            <div className='summary'>
+              <h4 >Sub total:</h4>
+              {totalPrice(cart)}
+            </div>
+          </div>
+          <div className='totalSummaryContainer'>
+            <div className='total'>
+              <h4>Total:</h4>
+              {totalPrice(cart)}
+            </div>
           </div>
         </div>
-        <div className='totalSummaryContainer'>
-          <div className='total'>
-            <span>Total:</span>
-            <span>$300</span>
-          </div>
-        </div>
-        </div>
+          <h5>Shipping: free</h5>
       </div>
     </CheckoutContainer>
   )
