@@ -27,6 +27,7 @@ const NavbarButtonsContainer = styled.div`
       position: absolute;
       top: -10px;
       font-weight: 700;
+      color: white;
     }
   }
 
@@ -48,10 +49,12 @@ const NavbarButtons = () => {
       <div className='search-btn btn-container'>
         <img src={search} alt='Search' />
       </div>
+      <Link to='checkout'>
       <div className='cart-btn btn-container'>
         <img src={cartIcon} alt='Cart' />
         <span className='cart-values'>{cartProducts}</span>
       </div>
+      </Link>
       {isLoggedIn ? (
         <button className='auth-btn btn-container'>
           <img src={user} alt='Logged out user' />

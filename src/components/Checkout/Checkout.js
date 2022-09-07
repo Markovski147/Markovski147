@@ -203,6 +203,10 @@ align-items: center;
   .quantityContainer {
     span {
       font-size: 5vw;
+      
+      :hover {
+        opacity: 100%;
+      }
     }
     
     .quantity{

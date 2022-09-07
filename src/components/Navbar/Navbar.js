@@ -92,15 +92,20 @@ const NavBarContainer = styled.div`
 
           li {
           text-transform: uppercase;
+          text-decoration: none;
           font-weight: 500;
           padding: 25px 0;
           border-bottom: 1px solid white;
+        }
           
           a {
             color: white;
             text-decoration: none;
           }
-          }
+          
+      .hidden {
+        display: none;
+      }
     }
     }
     
@@ -195,11 +200,13 @@ function NavBar({
           </div>
           <ul className='side-links'>         
             {
-              navItems.map(({ label, url, id }, index) => {
+              navItems.map(({ label, url, id, isPrivate }, index) => {
                 return (
+                  <Link to={url} className={!isLoggedIn && isPrivate ? 'hidden' : 'link'} onClick={(closeSidebar)}>
                   <li key={index}>
-                    <NavLink className='navItem' activeClassName='active' to={url} onClick={(closeSidebar)}>{label}</NavLink>
+                    <div className='navItem'>{label}</div>
                   </li>
+                  </Link>
                 )
               })
             }

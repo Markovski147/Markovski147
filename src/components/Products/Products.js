@@ -395,30 +395,8 @@ justify-content: center;
         
         @media (max-width: 600px) {
             font-size: 2.5vw;
+        }
     }
-      }
-      
-      .closebtn {
-        margin-left: 15px;
-        color: black;
-        font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.5s;
-      }
-      
-      .closebtn:hover {
-        color: gray;
-      }
-
-      .hideAlert {
-        position: absolute;
-        overflow: hidden;
-        transition: 0.5s;
-        width: 40%;
-      }
 `;
 
 const Products = () => {
@@ -557,22 +535,22 @@ const Products = () => {
                                 <div className="price">${price}</div>
                                 <div className="price">{rating}&#11088;</div>
                             </div>
-                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title="Add to Wish List" onClick={toggleCart(products, id, isLoggedIn)}>
-                            &#10084;</div>
+                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title={isLoggedIn ? "Add to Wish List" : 'Please log in'} onClick={toggleCart(products, id, isLoggedIn)}>
+                                &#10084;</div>
                         </div>
                     </div>
                 )
             })
         }
     }
-    
+
     const renderPagination = () => {
         updatedProducts = [...products];
         sort(updatedProducts);
         updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
         updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
-        let pages = [...Array(Math.ceil(updatedProducts.length/6+1)).keys()];
-        pages.splice(0,1);
+        let pages = [...Array(Math.ceil(updatedProducts.length / 6 + 1)).keys()];
+        pages.splice(0, 1);
         return pages.map((index) => {
             return (
                 <li key={index} className={currentPage === index ? "active" : ''} onClick={updateProducts(index)}>{index}</li>

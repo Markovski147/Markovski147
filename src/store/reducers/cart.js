@@ -11,14 +11,14 @@ const CartContext = createContext({
 export const CartContextProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
 
-    const toggleCart = useCallback((products, product, isloggedin) => () => {
-        if (!isloggedin) {
+    const toggleCart = useCallback((products, id, isloggedin) => () => {
+        if (isloggedin) {
             console.log(isloggedin)
-            product = product - 1;
-            if (cart.includes(products[product])) {
-                setCart(list => list.filter(item => item !== (products[product])));
+            id = id - 1;
+            if (cart.includes(products[id])) {
+                setCart(list => list.filter(item => item.id !== (products[id].id)));
             } else {
-                setCart([...cart, products[product]]);
+                setCart([...cart, products[id]]);
             }
         } else {
             return;
