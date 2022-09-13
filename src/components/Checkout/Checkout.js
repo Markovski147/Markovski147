@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useContext } from 'react';
-import CartContext from '../../store/reducers/cart';
+import CartContext from '../../store/cart';
 
 
 const CheckoutContainer = styled.div`
@@ -71,7 +71,7 @@ align-items: center;
       aspect-ratio: 4/3;
     }
 
-    h3 {
+    h4 {
       margin-left: 1em;
       font-weight: 700;
     }
@@ -93,7 +93,7 @@ align-items: center;
     width: 35%;
 
     span{
-      font-size: 2.5em;
+      font-size: 2.2em;
       font-weight: 300;
       cursor: pointer;
       :hover {
@@ -124,6 +124,12 @@ align-items: center;
   }
 
   h5 {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  h6 {
     font-weight: 400;
     text-transform: uppercase;
     color: gray;
@@ -162,6 +168,28 @@ align-items: center;
     width: 30%;
   }
 
+  .checkout {
+    width: 940px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+
+  .checkoutBtn {
+    height: 40px;
+    width: 12rem;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    background: rgb(19, 43, 159);
+    background: linear-gradient(90deg, rgba(19, 43, 159, 1) 0%, rgba(249, 5, 5, 1) 100%);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
   @media (max-width: 992px) {
     .mainContainer {
       width: 90%;
@@ -188,7 +216,11 @@ align-items: center;
     font-size: 2.2vw;
   }
 
-  h5 {
+  h5{
+    font-size: 2vw;
+  }
+
+  h6 {
     font-size: 2vw;
   }
 
@@ -213,6 +245,16 @@ align-items: center;
       font-size: 3vw;      
     }
   }
+  
+  .checkout {
+    width: 90%;
+
+    .checkoutBtn {
+      height: 6vw;
+      width: 26vw;
+      font-size: 2.2vw;
+    }
+  }
   }
 `
 
@@ -231,7 +273,7 @@ const renderProducts = (cart) => {
       <div key={index} className='product'>
         <div className='productCard'>
           <img src={thumbnail} alt='product'></img>
-          <h3>{title}</h3>
+          <h4>{title}</h4>
         </div>
         <div className='productOptions'>
           <span>/</span>
@@ -292,7 +334,11 @@ const totalPrice = (cart) => {
             </div>
           </div>
         </div>
-          <h5>Shipping: free</h5>
+          <h6>Shipping: free</h6>
+      </div>
+      <div className='checkout'>
+        <h5>Tax: calculated at checkout</h5>
+        <button className='checkoutBtn'>Checkout</button>
       </div>
     </CheckoutContainer>
   )

@@ -1,15 +1,15 @@
 import { FaSearch } from 'react-icons/fa';
 import styled from 'styled-components';
 import logo from '../../assets/logo.svg';
+import fb from '../../assets/fb.png';
+import insta from '../../assets/insta.png';
+import twitter from '../../assets/twitter.png';
 
 const FooterContainer = styled.div`
   position: relative;
    bottom: 0;
    width: 100%;
    margin-bottom: 15px;
-
-   @media (max-width: 720px) and (orientation:portrait) {
-   }
 
    .search-container {
     display: flex;
@@ -62,16 +62,17 @@ const FooterContainer = styled.div`
       font-weight: 800;
       font-size: 12px;
       text-align: center;
+      cursor: pointer;
      }
 
     .src-btn {
       width: 60px;
       }
 
-   .footer{
+   .footer {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
     padding-bottom: 15px;
 
     @media (max-width: 720px) and (orientation:portrait) {
@@ -79,39 +80,52 @@ const FooterContainer = styled.div`
     }
    }
 
-    .logo {
+    .iconsContainer {
       display: flex;
-      margin: 50px;
-
-      @media (max-width: 720px) and (orientation:portrait) {
-      margin: 20px;
-      }
+      margin: 30px;
+      flex-direction: column;
+      align-items: center;
     }
 
-    img {
-      margin: auto;
+    .logo {
       width: 80px;
+      margin: 20px;
     }
-    
+
+    .socialMedia {
+      display: flex;
+    }
+
+    .media {
+      width: 30px;
+      margin: 10px;
+      cursor: pointer;
+    }
+
     .footer-nav {
       display: flex;
       font-weight: 300;
       justify-content: space-around;
+      margin: 30px;
+
       @media (max-width: 720px) and (orientation:portrait) {
         height: 100%;
         display: block;
         text-align: center;
       }
     }
+
     .footer-nav div {
       font-size: 14px;
       margin: 5px 25px;
     }
+
     .footer-nav .top {
       font-size: 16px;
       margin: 20px 25px 10px;
       font-weight: 700;
     }
+
     .copyrights {
       border-top: 1px solid;
       font-size: 12px;
@@ -126,23 +140,26 @@ const Footer = () => {
     <FooterContainer>
       <div className='search-container'>
         <div className='src-product'>
-          <input type="text" placeholder='Search for product'/>
+          <input type="text" placeholder='Search for product' />
           <div className='src-btn'>
             <FaSearch />
           </div>
         </div>
         <div className='subs'>
-          <input type="text" placeholder='Enter email'/>
+          <input type="text" placeholder='Enter email' />
           <div className='sub-btn'>
-            <div>
-              SUBSCRIBE NOW
-            </div>
+            <div>SUBSCRIBE NOW</div>
           </div>
         </div>
       </div>
       <div className='footer'>
-        <div className='logo'>
-          <img src={logo} alt='Logo' />
+        <div className='iconsContainer'>
+          <img className='logo' src={logo} alt='Logo' />
+        <div className='socialMedia'>
+          <img className='media' src={fb} alt='fb' />
+          <img className='media' src={insta} alt='insta' />
+          <img className='media' src={twitter} alt='twitter' />
+        </div>
         </div>
         <div className='footer-nav'>
           <div>
@@ -172,9 +189,7 @@ const Footer = () => {
         </div>
       </div>
       <div className='copyrights'>
-        <div>
-          2022 Footskip Inc. All Rights Reserved
-        </div>
+        <div>2022 Footskip Inc. All Rights Reserved</div>
       </div>
     </FooterContainer>
   )

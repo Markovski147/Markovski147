@@ -4,6 +4,6 @@ export const addToCart = product => ({
 });
 
 export const removeFromCart = product => ({
-    type: 'ADD_PRODUCT',
+    type: 'REMOVE_PRODUCT',
     payload: product
 });

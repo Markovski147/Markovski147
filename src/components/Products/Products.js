@@ -1,10 +1,9 @@
 import styled from "styled-components";
-// import { useState } from 'react';
 import grid from '../../assets/grid.svg'
 import list from '../../assets/list.svg'
 import { FaBars } from "react-icons/fa";
 import ProductContext from '../../store/productsList';
-import CartContext from "../../store/reducers/cart";
+import CartContext from "../../store/cart";
 import { useContext, useState } from 'react';
 import { Link } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
@@ -157,11 +156,15 @@ justify-content: center;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 30px 5%;
+        padding: 5%;
+        height: 5rem;
     }
 
     h2 {
-        margin: 0
+        margin: 0;
+        @media (max-width: 600px) {
+            font-size: 3.6vw;
+        }
     }
 
     span {
@@ -170,6 +173,7 @@ justify-content: center;
 
         @media (max-width: 600px) {
             position: inherit;
+            font-size: 2.5vw;
         }
     }
 
@@ -177,13 +181,21 @@ justify-content: center;
         position: relative;
         float: right;
         top: 45px;
+
+        @media (max-width: 600px) {
+        label {
+            font-size: 2.5vw;
+        }
+    }
         
     @media (max-width: 600px) {
         position: initial;
     }
 
         form select{
-            width: 120px;
+            @media (max-width: 600px) {
+            font-size: 2.5vw;
+            }
         }
     }
 }
@@ -284,7 +296,6 @@ justify-content: center;
     .detailsContainer {
         display: flex;
         flex-direction: row;
-        min-height: 63px;
         margin: auto 0;
         height: 100%;
         justify-content: center;
@@ -296,10 +307,10 @@ justify-content: center;
         padding: 0;
 
         .productDetails{
-            margin: 5%;
             display:flex;
             flex-direction: column;
             justify-content: space-evenly;
+            height: inherit;
         }
     }
 
@@ -335,17 +346,33 @@ justify-content: center;
 
     .cart {
         position: relative;
-        margin: auto 10% auto 0;
+        margin: 5% 5% auto auto;
         float: right;
         font-size: 28px;
         cursor: pointer;
         width: 10%;
-        text-align: end;
+        text-align: center;
         color: #fff;
 
         @media (max-width: 600px) {
             font-size: 5vw;
     }
+    }
+    
+    @media (min-width: 992px) and (orientation: landscape) {
+        .cart[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            top: -2rem;
+            left: -4rem;
+            padding: 0.5rem;
+            border: 1px solid white 5px;
+            border-radius: 5px;
+            width: 8rem;
+            font-size: 12px;
+            background: white;
+            color: black;
+        }
     }
     }
 }
@@ -400,7 +427,6 @@ justify-content: center;
 `;
 
 const Products = () => {
-
     const { isLoggedIn } = useContext(AuthContext);
 
     const {
@@ -463,6 +489,11 @@ const Products = () => {
         updatedProducts = updatedProducts.slice((6 * page - 6), (6 * page));
         switchPage(page);
         setProductsToDisplay(updatedProducts);
+        if (currentPage === page) {
+            return
+        } else {
+        window.scrollTo({ top: 460, behavior: 'smooth' });
+        }
     }
 
     const updateProductsByCategory = (cat) => () => {
@@ -516,7 +547,7 @@ const Products = () => {
         )
     }
 
-    const renderProduct = (items) => {
+    const renderProducts = (items) => {
         if (items === undefined) {
             return <div>loading...</div>
         } else {
@@ -533,9 +564,9 @@ const Products = () => {
                                 <div className="title">{title}</div>
                                 <div className={listView ? 'hidden' : ''}>DESCRIPTION: {description}</div>
                                 <div className="price">${price}</div>
-                                <div className="price">{rating}&#11088;</div>
+                                <div className={listView ? 'hidden' : ''}>{rating}&#11088;</div>
                             </div>
-                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title={isLoggedIn ? "Add to Wish List" : 'Please log in'} onClick={toggleCart(products, id, isLoggedIn)}>
+                            <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title={!isInCart(id) & isLoggedIn ? 'Add to cart' : !isInCart(id) ? 'Please login to use cart' : 'Remove from cart'} onClick={toggleCart(products, id, isLoggedIn)}>
                                 &#10084;</div>
                         </div>
                     </div>
@@ -553,9 +584,36 @@ const Products = () => {
         pages.splice(0, 1);
         return pages.map((index) => {
             return (
-                <li key={index} className={currentPage === index ? "active" : ''} onClick={updateProducts(index)}>{index}</li>
+                <li className={currentPage === index ? "active" : ''} key={index} onClick={updateProducts(index)}>{index}</li>
             )
         })
+    }
+
+    const renderCategories = () => {
+        let categories = [];
+        products.map(({ category }) => {
+            if (!categories.includes(category)) {
+                return categories.push(category);
+            } else {
+                return categories;
+            }
+        })
+        return categories.map((category, index) => {
+            return (
+                <div>
+                    <input type="radio" name='category' value='category' key={index} onClick={updateProductsByCategory(category)} />{category.charAt(0).toUpperCase() + category.slice(1)}
+                </div>
+            )
+        })
+    }
+
+    const renderRatings = () => {
+        return [...Array(6).keys()].splice(1).map((rating, index) => {
+            return (<div>
+                <input type="radio" name="ratings" value={rating} key={index} onClick={updateProductsByRating(1)} />{rating}
+            </div>
+            )
+        });
     }
 
     return (
@@ -575,36 +633,11 @@ const Products = () => {
                         <div>
                             <input type="radio" name="category" value='' onClick={updateProductsByCategory('')} />All
                         </div>
-                        <div>
-                            <input type="radio" name="category" value='smartphones' onClick={updateProductsByCategory('smartphones')} />Smartphones
-                        </div>
-                        <div>
-                            <input type="radio" name="category" value='laptops' onClick={updateProductsByCategory('laptops')} />Laptops
-                        </div>
-                        <div>
-                            <input type="radio" name="category" value='fragrances' onClick={updateProductsByCategory('fragrances')} />Fragrances
-                        </div>
-                        <div>
-                            <input type="radio" name="category" value='groceries' onClick={updateProductsByCategory('groceries')} />Groceries
-                        </div>
+                        {renderCategories()}
                     </fieldset>
                     <fieldset className="ratings" id="ratings" onChange={(closeSidebar)}>
                         <h3>Rating stars</h3>
-                        <div>
-                            <input type="radio" name="ratings" value='1' onClick={updateProductsByRating(1)} />1
-                        </div>
-                        <div>
-                            <input type="radio" name="ratings" value='3' onClick={updateProductsByRating(2)} />2
-                        </div>
-                        <div>
-                            <input type="radio" name="ratings" value='3' onClick={updateProductsByRating(3)} />3
-                        </div>
-                        <div>
-                            <input type="radio" name="ratings" value='4' onClick={updateProductsByRating(4)} />4
-                        </div>
-                        <div>
-                            <input type="radio" name="ratings" value='5' onClick={updateProductsByRating(5)} />5
-                        </div>
+                        {renderRatings()}
                     </fieldset>
                     <fieldset className="shipping" id="shipping" onChange={(closeSidebar)}>
                         <h3>Shipping</h3>
@@ -630,7 +663,7 @@ const Products = () => {
                         <img src={list} alt='list' className={!listView ? 'active' : ''} onClick={showGridView}></img>
                     </div>
                     <div className='cardGridContainer'>
-                        {renderProduct(productsToDisplay)}
+                        {renderProducts(productsToDisplay)}
                     </div>
                     <div className="pagination">
                         <ul>

@@ -49,6 +49,17 @@ const NavBarContainer = styled.div`
   @media (min-width: 992px) {
     display: flex;
   }
+  
+  .welcome {
+    text-transform: uppercase;
+    margin: 0 30px;
+  }
+
+  span {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
 }
 
   .sidebar-container {
@@ -124,9 +135,9 @@ const NavBarContainer = styled.div`
 
   @media (min-width: 992px) {
     .nav-center {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
+      display: flex;
       align-items: center;
+      justify-content: space-evenly;
     }
 
     .nav-toggle {
@@ -150,11 +161,11 @@ const NavBarContainer = styled.div`
       .active {
         font-weight: bold;
       }
-
-      .hidden {
-        display: none;
-      }
     }
+  }
+
+  .hidden {
+    display: none;
   }
 `;
 
@@ -162,7 +173,7 @@ function NavBar({
   navItems = [],
 }) {
   
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, loggedInUser } = useContext(AuthContext);
 
   const [sidebar, setSidebar] = useState(false);
 
@@ -191,6 +202,9 @@ function NavBar({
           }
         </ul>
         <div className='navbar-btns'>
+        <div className={isLoggedIn ? 'welcome' : 'hidden'}>Welcome
+          <span> {loggedInUser ? loggedInUser.email : ''}!</span>
+        </div>
         <NavbarButtons onClick={(closeSidebar)}/>
           </div>
         <div className={sidebar ? 'sidebar-container activeNav' : 'sidebar-container'}>

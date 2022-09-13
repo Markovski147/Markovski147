@@ -6,8 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from './store/auth-context';
 import { ProductsContextProvider } from './store/productsList';
-import { CartContextProvider } from './store/reducers';
-
+import { CartContextProvider } from './store/cart';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

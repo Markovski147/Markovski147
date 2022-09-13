@@ -6,7 +6,7 @@ const LoginFormContainer = styled.div`
     display: block;
     align-items: center;
     justify-content: center;
-    margin: 10% auto;
+    margin: 5rem auto;
     width: 400px;
 }
 
@@ -80,13 +80,12 @@ form {
 }
 `;
 
-let loggedInUser;
 
 const LoginForm = () => {
 
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const { isLoggedIn, onLogin } = useContext(AuthContext);
+    const { isLoggedIn, onLogin, loggedInUser, loginUser } = useContext(AuthContext);
 
     const database = [
         {
@@ -116,7 +115,7 @@ const LoginForm = () => {
             } else {
                 setIsSubmitted(true);
                 onLogin();
-                loggedInUser = userData;                
+                loginUser(userData);                
             }
         } else {
             setErrorMessages({ name: "email", message: errors.email });

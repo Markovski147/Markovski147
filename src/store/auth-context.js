@@ -4,7 +4,8 @@ const AuthContext = createContext({
     isLoggedIn: false,
     onLogin: () => { },
     onLogout: () => { },
-    pleaseLogin: () => { }
+    loggedInUser: [],
+    loginUser: () => { }
 })
 
 export const AuthContextProvider = ({ children }) => {
@@ -17,16 +18,19 @@ export const AuthContextProvider = ({ children }) => {
     const logOut = () => {
         setIsLoggedIn(false);
     }
+
+    const [loggedInUser, setLoggedInUser] = useState();
     
-    const pleaseLogin = () => () => {
-        alert('Please login to use shopping cart');
+    const loginUser = (user) => {
+        setLoggedInUser(user);
     }
 
     const contextValues = {
         isLoggedIn: isLoggedIn,
         onLogin: logIn,
         onLogout: logOut,
-        pleaseLogin: pleaseLogin
+        loggedInUser: loggedInUser,
+        loginUser: loginUser
     }
 
     return (

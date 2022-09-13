@@ -4,7 +4,7 @@ import cartIcon from '../../assets/cart.svg';
 import user from '../../assets/user.svg';
 import { Link } from "react-router-dom";
 import { useContext } from 'react';
-import CartContext from '../../store/reducers/cart';
+import CartContext from '../../store/cart';
 import AuthContext from '../../store/auth-context';
 
 const NavbarButtonsContainer = styled.div`
