@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import logo from '../../assets/logo.svg';
 import NavbarButtons from './NavbarButtons';
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { NavLink, Link } from "react-router-dom";
 import AuthContext from '../../store/auth-context';
+import SidebarComponent from './sidebarComponent';
 
 const NavBarContainer = styled.div`
   display: flex;
@@ -172,24 +173,18 @@ const NavBarContainer = styled.div`
 function NavBar({
   navItems = [],
 }) {
-  
-  const { isLoggedIn, loggedInUser } = useContext(AuthContext);
 
-  const [sidebar, setSidebar] = useState(false);
+  const { isLoggedIn, loggedInUser, showSidebar, closeSidebar } = useContext(AuthContext);
 
-  const showSidebar = () => setSidebar(!sidebar);
-
-  const closeSidebar = () => setSidebar(false);
-  
   return (
     <NavBarContainer>
       <div className='nav-center'>
         <div className='nav-header'>
-        <Link to='/' onClick={(closeSidebar)}>
-          <img src={logo} alt='Logo' />
+          <Link to='/' onClick={(closeSidebar)}>
+            <img src={logo} alt='Logo' />
           </Link>
-          <button className='nav-toggle'>
-            <FaBars onClick={(showSidebar)} />
+          <button className='nav-toggle' onClick={(showSidebar)}>
+            <FaBars />
           </button>
         </div>
         <ul className='nav-links'>
@@ -202,30 +197,12 @@ function NavBar({
           }
         </ul>
         <div className='navbar-btns'>
-        <div className={isLoggedIn ? 'welcome' : 'hidden'}>Welcome
-          <span> {loggedInUser ? loggedInUser.email : ''}!</span>
-        </div>
-        <NavbarButtons onClick={(closeSidebar)}/>
+          <div className={isLoggedIn ? 'welcome' : 'hidden'}>Welcome
+            <span> {loggedInUser ? loggedInUser.email : ''}!</span>
           </div>
-        <div className={sidebar ? 'sidebar-container activeNav' : 'sidebar-container'}>
-          <div className='side-close' onClick={(closeSidebar)}>&#x2716;</div>
-          <div className='sidebar-btns' onClick={(closeSidebar)}>
-            <NavbarButtons />
-          </div>
-          <ul className='side-links'>         
-            {
-              navItems.map(({ label, url, id, isPrivate }, index) => {
-                return (
-                  <Link to={url} className={!isLoggedIn && isPrivate ? 'hidden' : 'link'} onClick={(closeSidebar)}>
-                  <li key={index}>
-                    <div className='navItem'>{label}</div>
-                  </li>
-                  </Link>
-                )
-              })
-            }
-          </ul>
+          <NavbarButtons onClick={(closeSidebar)} />
         </div>
+        <SidebarComponent navItems={navItems}/>
       </div>
     </NavBarContainer>
   )

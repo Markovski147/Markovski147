@@ -5,7 +5,10 @@ const AuthContext = createContext({
     onLogin: () => { },
     onLogout: () => { },
     loggedInUser: [],
-    loginUser: () => { }
+    loginUser: () => { },
+    sidebar: [],
+    showSidebar: () => { },
+    closeSidebar: () => { }
 })
 
 export const AuthContextProvider = ({ children }) => {
@@ -24,13 +27,22 @@ export const AuthContextProvider = ({ children }) => {
     const loginUser = (user) => {
         setLoggedInUser(user);
     }
+    
+  const [sidebar, setSidebar] = useState(false);
+
+  const showSidebar = () => setSidebar(!sidebar);
+
+  const closeSidebar = () => setSidebar(false);
 
     const contextValues = {
         isLoggedIn: isLoggedIn,
         onLogin: logIn,
         onLogout: logOut,
         loggedInUser: loggedInUser,
-        loginUser: loginUser
+        loginUser: loginUser,
+        sidebar: sidebar,
+        showSidebar: showSidebar,
+        closeSidebar: closeSidebar
     }
 
     return (

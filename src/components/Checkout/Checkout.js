@@ -190,6 +190,10 @@ align-items: center;
     cursor: pointer;
   }
 
+  .checkoutBtn:disabled {
+    opacity: 50%;
+  }
+
   @media (max-width: 992px) {
     .mainContainer {
       width: 90%;
@@ -261,7 +265,9 @@ align-items: center;
 const Checkout = () => {
   const {
     cart,
-    changeQuantity
+    changeQuantity,
+    checkoutCart,
+    cartProducts
   } = useContext(CartContext);
 
 const renderProducts = (cart) => {
@@ -338,7 +344,7 @@ const totalPrice = (cart) => {
       </div>
       <div className='checkout'>
         <h5>Tax: calculated at checkout</h5>
-        <button className='checkoutBtn'>Checkout</button>
+        <button className='checkoutBtn' onClick={checkoutCart()} disabled={!cartProducts ? 'disable' : ''}>Checkout</button>
       </div>
     </CheckoutContainer>
   )

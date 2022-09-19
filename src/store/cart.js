@@ -5,7 +5,8 @@ const CartContext = createContext({
     toggleCart: () => { },
     isInCart: () => { },
     cartProducts: 0,
-    changeQuantity: () => { }
+    changeQuantity: () => { },
+    checkoutCart: () => { }
 });
 
 export const CartContextProvider = ({ children }) => {
@@ -13,7 +14,6 @@ export const CartContextProvider = ({ children }) => {
 
     const toggleCart = useCallback((products, id, isloggedin) => () => {
         if (isloggedin) {
-            console.log(isloggedin)
             id = id - 1;
             if (cart.includes(products[id])) {
                 setCart(list => list.filter(item => item.id !== (products[id].id)));
@@ -23,7 +23,6 @@ export const CartContextProvider = ({ children }) => {
         } else {
             return;
         }
-        console.log(cart)
     }, [cart]);
 
     const isInCart = (id) => {
@@ -51,12 +50,21 @@ export const CartContextProvider = ({ children }) => {
         setCart(updateQuantity);
     }
 
+    const checkoutCart = () => () => {
+        if (cartProducts) {
+        return setCart([]);
+        } else {
+            return console.log('Your cart is empty')
+        }
+    }
+
     const contextValues = {
         cart: cart,
         toggleCart: toggleCart,
         isInCart: isInCart,
         cartProducts: cartProducts,
-        changeQuantity: changeQuantity
+        changeQuantity: changeQuantity,
+        checkoutCart: checkoutCart
     };
 
     return (
