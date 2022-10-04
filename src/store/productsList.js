@@ -61,7 +61,7 @@ export const ProductsContextProvider = ({ children }) => {
   }
 
   const sort = (list, sortBy = currentSortBy) => {
-    if (currentSortBy === 'byName') {
+    if (sortBy === 'byName') {
       list.sort((a, b) => {
         let fa = a.title.toLowerCase(),
           fb = b.title.toLowerCase();
@@ -121,6 +121,12 @@ export const ProductsContextProvider = ({ children }) => {
     setProductsToDisplay(updatedProducts);
   }
 
+  // const [currentItem, setCurrentItem] = useState();
+
+  // changeCurrentItem = (id) => {
+  //   setCurrentItem(id);
+  // }
+  
   const contextValues = {
     products: products,
     currentPage: currentPage,

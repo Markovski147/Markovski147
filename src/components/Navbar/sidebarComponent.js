@@ -19,11 +19,13 @@ function SidebarComponent({
                 {
                     navItems.map(({ label, url, id, isPrivate }, index) => {
                         return (
+                            <div key={index}>
                             <Link to={url} className={!isLoggedIn && isPrivate ? 'hidden' : 'link'} onClick={(closeSidebar)}>
                                 <li key={index}>
                                     <div className='navItem'>{label}</div>
                                 </li>
                             </Link>
+                            </div>
                         )
                     })
                 }

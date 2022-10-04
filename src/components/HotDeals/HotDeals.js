@@ -19,7 +19,7 @@ const HotDealsContainer = styled.div`
         width: 1100px;
         margin: 0 auto;
 
-        @media (max-width: 992px) {
+        @media (max-width: 1130px) {
             width: 500px;
         }
         
@@ -45,7 +45,7 @@ const HotDealsContainer = styled.div`
         }
         }
 
-        @media (max-width: 992px) {
+        @media (max-width: 1130px) {
             grid-template-columns: repeat(2, auto);
         }
     }

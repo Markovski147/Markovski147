@@ -3,7 +3,7 @@
     justify-content: center;
 }
 
-.productsContainer > .gridContainer {
+.productsContainer>.gridContainer {
     width: 940px;
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -39,7 +39,7 @@
     margin: 30px 30px 0 30px;
 }
 
-.sortByPrice > input {
+.sortByPrice>input {
     width: 90%;
 }
 
@@ -179,7 +179,7 @@ img:hover {
     justify-content: space-between;
 }
 
-.cardGridContainer > .card {
+.cardGridContainer>.card {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -188,7 +188,7 @@ img:hover {
     height: 80%;
 }
 
-.listView {
+.cardGridContainer>.listView {
     width: 100%;
     flex-direction: row;
     grid-auto-rows: auto;
@@ -270,11 +270,11 @@ img:hover {
     color: #db1f1f;
 }
 
-.pagination>ul {
+.pagination > ul {
     display: flex;
     height: 50px;
     list-style: none;
-    margin: 5% 0 0 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -309,7 +309,7 @@ img:hover {
     transition: 0.5s;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 660px) {
     .sideBarContainer {
         width: 100%;
         overflow: scroll;
@@ -317,7 +317,7 @@ img:hover {
         padding: 10%;
     }
 
-    .sideBarContainer > .side-close {
+    .sideBarContainer>.side-close {
         margin-right: 75px;
     }
 
@@ -339,7 +339,7 @@ img:hover {
         font-size: 2.5vw;
     }
 
-    .sortBy > form > label {
+    .sortBy>form>label {
         font-size: 2.5vw;
     }
 
@@ -358,6 +358,16 @@ img:hover {
     .cardGridContainer {
         width: 100%;
         grid-template-columns: repeat(2, 48%);
+    }
+
+
+    .pagination > ul > li {
+        height: 10vw;
+    }
+
+    .pagination > ul > li {
+        width: 7%;
+        font-size: 2.3vw;
     }
 
     .productDetails {
@@ -379,7 +389,7 @@ img:hover {
 }
 
 @media (max-width: 992px) {
-    .productsContainer > .gridContainer {
+    .productsContainer>.gridContainer {
         justify-content: center;
         width: 90%;
     }

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useContext } from 'react';
 import CartContext from '../../store/cart';
+import {calcTotalPrice} from './priceCalc.ts'
 
 
 const CheckoutContainer = styled.div`
@@ -297,7 +298,7 @@ const renderProducts = (cart) => {
 const totalPrice = (cart) => {
   let total = 0;
   cart.map(({price, quantity}) => {
-    return total = total + price*quantity;
+    return total = calcTotalPrice(total, price, quantity);
   })
   return (
     <>
@@ -340,7 +341,7 @@ const totalPrice = (cart) => {
             </div>
           </div>
         </div>
-          <h6>Shipping: free</h6>
+          <h6>Shipping fee: free</h6>
       </div>
       <div className='checkout'>
         <h5>Tax: calculated at checkout</h5>

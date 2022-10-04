@@ -97,3 +97,26 @@ export const renderProducts = (products, listView, isInCart, isLoggedIn, toggleC
         })
     }
 }
+
+export const renderSimilarProducts = (products, currentItem) => {
+    let category = currentItem.category;
+    let updatedProducts = [...products];
+    updatedProducts = updatedProducts.filter(item => item.category.includes(category));
+    updatedProducts = updatedProducts.filter(item => item.id !== currentItem.id);
+    if (products === undefined) {
+        return <div>loading...</div>
+    } else {
+        return updatedProducts.slice(0, 2).map(({ id, title, price, thumbnail, brand }, index) => {
+            return (
+                <div className="item-container">
+                        <img src={thumbnail} alt=''></img>
+                    <div className="item-details">
+                        <h6>{brand}</h6>
+                        <h6 className="title">{title}</h6>
+                        <h6 className="price">${price}</h6>
+                    </div>
+                </div>
+            )
+        })
+    }
+}

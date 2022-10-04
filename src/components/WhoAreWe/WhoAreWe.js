@@ -22,7 +22,7 @@ const WhoAreWeContainer = styled.div`
         margin: 20px auto;
         max-width: 1000px;
         
-        @media (max-width: 992px) {
+        @media (max-width: 1130px) {
             max-width: 550px;
         }
         
@@ -36,7 +36,7 @@ const WhoAreWeContainer = styled.div`
         width: 1100px;
         margin: 0 auto;
 
-        @media (max-width: 992px) {
+        @media (max-width: 1130px) {
             width: 600px;
         }
         
@@ -64,7 +64,7 @@ const WhoAreWeContainer = styled.div`
         }
         
 
-        @media (max-width: 992px) {
+        @media (max-width: 1130px) {
             grid-template-columns: repeat(2, 240px);
             justify-content: space-evenly;
         }
