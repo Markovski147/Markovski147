@@ -270,7 +270,7 @@ img:hover {
     color: #db1f1f;
 }
 
-.pagination > ul {
+.pagination>ul {
     display: flex;
     height: 50px;
     list-style: none;
@@ -307,6 +307,19 @@ img:hover {
     font-size: 14px;
     max-width: 42%;
     transition: 0.5s;
+}
+
+.priceRangeDiv {
+    display: flex;
+    margin: 0 2em 1em 0;
+}
+
+.minP {
+    width: 100%;
+}
+
+.maxP {
+    width: 100%;
 }
 
 @media (max-width: 660px) {
@@ -361,11 +374,11 @@ img:hover {
     }
 
 
-    .pagination > ul > li {
+    .pagination>ul>li {
         height: 10vw;
     }
 
-    .pagination > ul > li {
+    .pagination>ul>li {
         width: 7%;
         font-size: 2.3vw;
     }

@@ -14,9 +14,16 @@ const ProductContext = createContext({
   currentSortBy: [],
   switchSortBy: () => { },
   updateProducts: () => { },
+  updateProduct: () => { },
   updateProductsByCategory: () => { },
   updateProductsByRating: () => { },
-  sort: () => { }
+  sort: () => { },
+  currentId: [],
+  setCurrentProduct: () => { },
+  currentPriceRange: [],
+  updateProductsByPriceRange: () => { },
+  minPrice: [],
+  maxPrice: []
 })
 
 export const ProductsContextProvider = ({ children }) => {
@@ -60,6 +67,10 @@ export const ProductsContextProvider = ({ children }) => {
     setCurrentSortBy(sortBy);
   }
 
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000);
+
+
   const sort = (list, sortBy = currentSortBy) => {
     if (sortBy === 'byName') {
       list.sort((a, b) => {
@@ -89,6 +100,7 @@ export const ProductsContextProvider = ({ children }) => {
     sort(updatedProducts, currentSortBy);
     updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
     updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+    updatedProducts = updatedProducts.filter(item => item.price >= minPrice & item.price <= maxPrice);
     updatedProducts = updatedProducts.slice((6 * page - 6), (6 * page));
     switchPage(page);
     setProductsToDisplay(updatedProducts);
@@ -99,12 +111,19 @@ export const ProductsContextProvider = ({ children }) => {
     }
   }
 
+  const updateProduct = () => () => {
+    let updatedProducts = [...products];
+    setProductsToDisplay(updatedProducts);  
+  }
+
   const updateProductsByCategory = (cat) => () => {
     switchCategory(cat);
     let updatedProducts = [...products];
     sort(updatedProducts, currentSortBy);
     updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
     updatedProducts = updatedProducts.filter(item => item.category.includes(cat));
+    updatedProducts = updatedProducts.filter(item => item.price >= minPrice & item.price <= maxPrice);
+    console.log(minPrice, maxPrice)
     updatedProducts = updatedProducts.slice(0, 6);
     switchPage(1);
     setProductsToDisplay(updatedProducts);
@@ -115,18 +134,33 @@ export const ProductsContextProvider = ({ children }) => {
     sort(updatedProducts, currentSortBy);
     updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
     updatedProducts = updatedProducts.filter(item => item.rating > rating);
+    updatedProducts = updatedProducts.filter(item => item.price >= minPrice & item.price <= maxPrice);
     updatedProducts = updatedProducts.slice(0, 6);
     switchRating(rating);
     switchPage(1);
     setProductsToDisplay(updatedProducts);
   }
 
-  // const [currentItem, setCurrentItem] = useState();
+  const updateProductsByPriceRange = (changeMinPrice, changeMaxPrice) => {
+    setMinPrice(changeMinPrice);
+    setMaxPrice(changeMaxPrice);
+    let updatedProducts = [...products];
+    sort(updatedProducts, currentSortBy);
+    updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
+    updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+    updatedProducts = updatedProducts.filter(item => item.price >= minPrice & item.price <= maxPrice);
+    updatedProducts = updatedProducts.slice(0, 6);
+    switchRating(currentRating);
+    switchPage(1);
+    setProductsToDisplay(updatedProducts);
+  }
 
-  // changeCurrentItem = (id) => {
-  //   setCurrentItem(id);
-  // }
-  
+  const [currentId, setCurrentId] = useState();
+  const setCurrentProduct = () => {
+    let curId = window.location.pathname.slice(-2);
+    setCurrentId(products[curId.replace('/', '') - 1]);  
+  }
+
   const contextValues = {
     products: products,
     currentPage: currentPage,
@@ -140,9 +174,15 @@ export const ProductsContextProvider = ({ children }) => {
     currentSortBy: currentSortBy,
     switchSortBy: switchSortBy,
     updateProducts: updateProducts,
+    updateProduct: updateProduct,
     updateProductsByCategory: updateProductsByCategory,
     updateProductsByRating: updateProductsByRating,
-    sort: sort
+    sort: sort,
+    currentId: currentId,
+    setCurrentProduct: setCurrentProduct,
+    updateProductsByPriceRange,
+    minPrice: minPrice,
+    maxPrice: maxPrice
   };
 
   return (

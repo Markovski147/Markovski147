@@ -22,7 +22,7 @@ function App() {
         <Route path='/products' exact>
           <ProductsPage/>
         </Route>
-        <Route path='/products/product'>
+        <Route path='/product'>
           <ProductDetailsPage/>
         </Route>
         <Route path='/checkout'>

@@ -8,7 +8,9 @@ const AuthContext = createContext({
     loginUser: () => { },
     sidebar: [],
     showSidebar: () => { },
-    closeSidebar: () => { }
+    closeSidebar: () => { },
+    isLoading: [],
+    triggerLoading: () => { },
 })
 
 export const AuthContextProvider = ({ children }) => {
@@ -23,16 +25,29 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     const [loggedInUser, setLoggedInUser] = useState();
-    
+
     const loginUser = (user) => {
         setLoggedInUser(user);
     }
-    
-  const [sidebar, setSidebar] = useState(false);
 
-  const showSidebar = () => setSidebar(!sidebar);
+    const [sidebar, setSidebar] = useState(false);
 
-  const closeSidebar = () => setSidebar(false);
+    const showSidebar = () => setSidebar(!sidebar);
+
+    const closeSidebar = () => setSidebar(false);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const triggerLoading = () => {
+        if (!isLoading) {
+            return
+        } else {
+        setIsLoading(true);
+        setTimeout(() => {
+            setIsLoading(false);
+          }, 2000);
+        }
+    }
 
     const contextValues = {
         isLoggedIn: isLoggedIn,
@@ -42,7 +57,9 @@ export const AuthContextProvider = ({ children }) => {
         loginUser: loginUser,
         sidebar: sidebar,
         showSidebar: showSidebar,
-        closeSidebar: closeSidebar
+        closeSidebar: closeSidebar,
+        isLoading: isLoading,
+        triggerLoading: triggerLoading
     }
 
     return (

@@ -3,7 +3,21 @@ import CartContext from '../../store/cart'
 import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import AuthContext from "../../store/auth-context";
-import { renderSimilarProducts } from "./renderFunctions";
+import { renderSimilarProducts } from "./renderFunctions.js";
+import { checkProduct, toggleMenu } from "./renderFunctions.tsx";
+import "./spinner.css";
+import notFound from '../../assets/not-found.jpg';
+
+const NoProductContainer = styled.div`
+
+    display: flex;
+    justify-content: center;
+
+img {
+    width: 600px;
+    margin: 1em;
+}
+`
 
 const ProductDetailsContainer = styled.div`
     display: flex;
@@ -23,6 +37,23 @@ const ProductDetailsContainer = styled.div`
     border-right: 1px solid white;
 }
 
+.images-container .mainImg {
+    cursor: zoom-in;
+}
+
+.images-container img {
+    cursor: pointer;
+}
+
+.images-container .enlarge {
+    position: absolute;
+    left: 17%;
+    width 70%;
+    height: auto;
+    cursor: zoom-out;
+    z-index: 3;
+}
+
 .checkoutBtn {
   height: 40px;
   width: 12rem;
@@ -36,6 +67,20 @@ const ProductDetailsContainer = styled.div`
   text-transform: uppercase;
   cursor: pointer;
   margin: 3em 0;
+}
+    .btnDiv[title]:hover::after {
+    content: attr(title);
+    position: relative;
+    top: -3rem;
+    left: -10rem;
+    padding: 0.5rem;
+    border: 1px solid white 5px;
+    border-radius: 5px;
+    width: 8rem;
+    font-size: 12px;
+    background: white;
+    color: black;
+    font-weight: 400;
 }
 
 .img-container {
@@ -84,6 +129,7 @@ const ProductDetailsContainer = styled.div`
 .description, .details, .shipping {
     border-top: 1px solid grey;
     margin: 0 0 1em 0;
+    cursor: pointer;
 }
 
 .details-container div h4 {
@@ -103,7 +149,7 @@ const ProductDetailsContainer = styled.div`
     font-size: 12px;
 }
 
-hidden {
+.hidden {
     display: none;
 }
 
@@ -120,7 +166,10 @@ hidden {
 
 .details-container .similar-items img {
     max-width: 150px;
+    max-height: 150px;
     margin: 0 auto;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 
 .similar-items .item-container {
@@ -144,7 +193,7 @@ hidden {
 }
 
 h3 {
-    font-size: 3vw;
+    font-size: 24px;
     text-transform: uppercase;
     font-weight: 800;
   }
@@ -173,6 +222,10 @@ h6 {
       height: 6vw;
       width: 26vw;
       font-size: 2vw;
+}
+
+.btnDiv[title]:hover::after {
+    display: none;
 }
 
 .details-container div span {
@@ -214,53 +267,60 @@ h5 span {
 
 `
 
-
 const ProductDetails = () => {
 
-    const { isLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn, triggerLoading, isLoading } = useContext(AuthContext);
 
-    const { products } = useContext(ProductContext);
+    const {
+        products,
+        updateProduct,
+        currentId,
+        setCurrentProduct
+    } = useContext(ProductContext);
+
     const {
         toggleCart,
         isInCart
     } = useContext(CartContext);
 
-    const curId = window.location.pathname.slice(-2);
-    const product = products[curId.replace('/', '') - 1];
+    setCurrentProduct(currentId);
+    let product = currentId;
 
     const [showDescription, setShowDescription] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
     const [showShipping, setShowShipping] = useState(false);
+    const [mainImage, setMainImage] = useState();
 
-    const toggleMenu = (type) => () => {
-        switch(type) {
-            case 'description':
-                showDescription ? setShowDescription(false) : setShowDescription(true);
-                break;
-            case 'details':
-                showDetails ? setShowDetails(false) : setShowDetails(true);
-                break;
-            case 'shipping':
-                showShipping ? setShowShipping(false) : setShowShipping(true);
-                break;
-                default:
-        }
+    const setMainImageHandler = (img) => () => {
+        let newMainImage = product.images[img];
+        setMainImage(newMainImage);
     }
 
-    return (
+    const [enlargeImg, setEnlargeImg] = useState(false);
+    const toggleEnlarge = () => () => {
+        enlargeImg ? setEnlargeImg(false) : setEnlargeImg(true);
+    }
+
+    if (!product) {
+        return (
+            <NoProductContainer>
+            {checkProduct(isLoading, triggerLoading, notFound)}
+            </NoProductContainer>
+        )
+    } else return (
         <ProductDetailsContainer>
             <div className='main-container'>
                 <div className='images-container'>
                     <div className='img-container'>
                         <h3>Product</h3>
                         <div className='images-container'>
-                            <img src={product.images[0]} alt=''></img>
+                            <img className={enlargeImg ? 'enlarge' : 'mainImg'} src={mainImage ? mainImage : product.images[0]} onClick={toggleEnlarge()} alt=''></img>
                             <div className='second-img-container'>
-                                <img src={product.images[1]} alt=''></img>
-                                <img src={product.images[2]} alt=''></img>
+                                <img src={mainImage === product.images[1] ? product.images[0] : product.images[1]} onClick={mainImage === product.images[0] ? setMainImageHandler(1) : setMainImageHandler(0)} alt=''></img>
+                                <img src={mainImage === product.images[2] ? product.images[0] : product.images[2]} onClick={mainImage === product.images[0] ? setMainImageHandler(2) : setMainImageHandler(0)} alt=''></img>
                             </div>
                             <div className='last-img-container'>
-                                <img src={product.images[3]} alt=''></img>
+                                <img src={mainImage === product.images[3] ? product.images[0] : product.images[3]} onClick={mainImage === product.images[0] ? setMainImageHandler(3) : setMainImageHandler(0)} alt=''></img>
                             </div>
                         </div>
                     </div>
@@ -270,28 +330,30 @@ const ProductDetails = () => {
                         <h3>{product.title}</h3>
                         <h4 className='price'>${product.price}</h4>
                         <h3>{product.brand}</h3>
-                        <h4>Rating: {'⭐'.repeat(Math.round(product.rating)) + '★'.repeat(5-Math.round(product.rating))}</h4>
+                        <h4>Rating: {'⭐'.repeat(Math.round(product.rating)) + '★'.repeat(5 - Math.round(product.rating))}</h4>
                         <h4>Stock: {product.stock}</h4>
                         <h5>Discount: <span>{product.discountPercentage}%</span></h5>
-                        <button className='checkoutBtn' onClick={toggleCart(products, product.id, isLoggedIn)}>{isInCart(product.id) ? 'Remove from cart' : 'Add to cart'}</button>
+                        <div className={!isLoggedIn ? 'btnDiv' : ''} title={!isLoggedIn ? 'Please login to use cart' : ''}>
+                            <button className='checkoutBtn' onClick={toggleCart(products, product.id, isLoggedIn)}>{isInCart(product.id) ? 'Remove from cart' : 'Add to cart'}</button>
+                        </div>
                     </div>
                     <div className='details-container'>
                         <div className='description'>
-                            <h4 onClick={toggleMenu('description')}><span>{showDescription ? '\u2796' : '\u2795'}</span>Description</h4>
+                            <h4 onClick={toggleMenu('description', showDescription, setShowDescription)}><span>{showDescription ? '\u2796' : '\u2795'}</span>Description</h4>
                             <p className={showDescription ? '' : 'hidden'}>{product.description}</p>
                         </div>
                         <div className='details'>
-                            <h4 onClick={toggleMenu('details')}><span>{showDetails ? '\u2796' : '\u2795'}</span>Details</h4>
+                            <h4 onClick={toggleMenu('details', showDetails, setShowDetails)}><span>{showDetails ? '\u2796' : '\u2795'}</span>Details</h4>
                             <p className={showDetails ? '' : 'hidden'}>No details available</p>
                         </div>
                         <div className='shipping'>
-                            <h4 onClick={toggleMenu('shipping')}><span>{showShipping ? '\u2796' : '\u2795'}</span>Shipping and returns</h4>
+                            <h4 onClick={toggleMenu('shipping', showShipping, setShowShipping)}><span>{showShipping ? '\u2796' : '\u2795'}</span>Shipping and returns</h4>
                             <p className={showShipping ? '' : 'hidden'}>Shipping fee: free</p>
                         </div>
                         <div className='similar-items-container'>
                             <h4>Similar items</h4>
                             <div className='similar-items'>
-                            {renderSimilarProducts(products, product)}
+                                {renderSimilarProducts(products, product, updateProduct, setMainImageHandler)}
                             </div>
                         </div>
                     </div>

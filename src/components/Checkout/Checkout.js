@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useContext } from 'react';
 import CartContext from '../../store/cart';
 import {calcTotalPrice} from './priceCalc.ts'
-
+import { Link } from "react-router-dom";
 
 const CheckoutContainer = styled.div`
 display: flex;
@@ -279,7 +279,9 @@ const renderProducts = (cart) => {
     return (
       <div key={index} className='product'>
         <div className='productCard'>
+                <Link to={`/product/${id}`}>
           <img src={thumbnail} alt='product'></img>
+          </Link>
           <h4>{title}</h4>
         </div>
         <div className='productOptions'>

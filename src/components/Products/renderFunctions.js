@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import {Spinner}  from "./renderFunctions.tsx";
 
 export const renderCategories = (products, updateFunc) => {
     let categories = [];
@@ -18,20 +19,11 @@ export const renderCategories = (products, updateFunc) => {
     })
 }
 
-export const renderRatings = (updateFunc) => {
-    return [...Array(6).keys()].splice(1).map((rating, index) => {
-        return (<div>
-            <input type="radio" name="ratings" value={rating} key={index} onClick={updateFunc(rating)} />{rating}
-        </div>
-        )
-    });
-}
-
-export const renderPagination = (products, sort, currentCategory, currentRating, currentPage, updateFunc) => {
+export const renderPagination = (products, currentCategory, currentRating, currentPage, updateFunc, minPrice, maxPrice) => {
     let updatedProducts = [...products];
-    sort(updatedProducts);
     updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
     updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+    updatedProducts = updatedProducts.filter(item => item.price >= minPrice & item.price <= maxPrice);
     let pages = [...Array(Math.ceil(updatedProducts.length / 6 + 1)).keys()];
     pages.splice(0, 1);
     return pages.map((index) => {
@@ -41,7 +33,7 @@ export const renderPagination = (products, sort, currentCategory, currentRating,
     })
 }
 
-export const renderSortForm = (products, sort, currentCategory, currentRating, setProductsToDisplay, switchSortBy, switchPage) => {
+export const renderSortForm = (products, sort, currentCategory, currentRating, setProductsToDisplay, switchSortBy, switchPage, minPrice, maxPrice) => {
     let updatedProducts = [...products];
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -50,6 +42,7 @@ export const renderSortForm = (products, sort, currentCategory, currentRating, s
         sort(updatedProducts, sortBy);
         updatedProducts = updatedProducts.filter(item => item.category.includes(currentCategory));
         updatedProducts = updatedProducts.filter(item => item.rating > currentRating);
+        updatedProducts = updatedProducts.filter(item => item.price >= minPrice & item.price <= maxPrice);
         setProductsToDisplay(updatedProducts);
         switchSortBy(sortBy);
         switchPage(1);
@@ -71,14 +64,16 @@ export const renderSortForm = (products, sort, currentCategory, currentRating, s
 }
 
 export const renderProducts = (products, listView, isInCart, isLoggedIn, toggleCart) => {
-    if (products === undefined) {
-        return <div>loading...</div>
+    if (products >= 0) {
+        return (
+            <Spinner />
+        )
     } else {
         return products.slice(0, 6).map(({ id, title, description, price, thumbnail, rating }, index) => {
             return (
                 <div key={index} className={!listView ? 'card listView' : 'card'}>
                     <div className="imgDiv">
-                        <Link to={`/products/product/${id}`}>
+                        <Link to={`/product/${id}`}>
                             <img src={thumbnail} alt=''></img>
                         </Link>
                     </div>
@@ -98,18 +93,21 @@ export const renderProducts = (products, listView, isInCart, isLoggedIn, toggleC
     }
 }
 
-export const renderSimilarProducts = (products, currentItem) => {
+export const renderSimilarProducts = (products, currentItem, updateFunc, setMainImageHandler) => {
     let category = currentItem.category;
     let updatedProducts = [...products];
     updatedProducts = updatedProducts.filter(item => item.category.includes(category));
     updatedProducts = updatedProducts.filter(item => item.id !== currentItem.id);
+    updatedProducts = updatedProducts.sort(() => 0.5 - Math.random());
     if (products === undefined) {
         return <div>loading...</div>
     } else {
         return updatedProducts.slice(0, 2).map(({ id, title, price, thumbnail, brand }, index) => {
             return (
                 <div className="item-container">
-                        <img src={thumbnail} alt=''></img>
+                    <Link onClick={updateFunc()} to={`/product/${id}`}>
+                        <img src={thumbnail} alt='' onClick={setMainImageHandler(0)}></img>
+                    </Link>
                     <div className="item-details">
                         <h6>{brand}</h6>
                         <h6 className="title">{title}</h6>

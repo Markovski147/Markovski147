@@ -60,7 +60,7 @@ const NavbarButtons = () => {
           <img src={user} alt='Logged out user' />
         </button>
       ) : (
-        <Link to='login'>
+        <Link to='/login'>
         <button className='auth-btn btn-container'>
           <img src={user} alt='Logged in user' />
         </button>

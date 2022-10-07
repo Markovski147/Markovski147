@@ -5,8 +5,10 @@ import ProductContext from '../../store/productsList';
 import CartContext from "../../store/cart";
 import { useContext, useState } from 'react';
 import AuthContext from "../../store/auth-context";
-import { renderCategories, renderRatings, renderPagination, renderSortForm, renderProducts } from "./renderFunctions";
+import { renderCategories, renderPagination, renderSortForm, renderProducts } from "./renderFunctions.js";
+import { renderRatings, renderRangeSlider } from "./renderFunctions.tsx";
 import './products.css';
+import "./spinner.css";
 
 const Products = () => {
     const { isLoggedIn } = useContext(AuthContext);
@@ -23,7 +25,10 @@ const Products = () => {
         updateProducts,
         updateProductsByCategory,
         updateProductsByRating,
-        sort
+        sort,
+        updateProductsByPriceRange,
+        minPrice,
+        maxPrice
     } = useContext(ProductContext);
 
     const {
@@ -46,10 +51,7 @@ const Products = () => {
                     <div className='side-close' onClick={(closeSidebar)}>&#x2716;</div>
                     <div className="sortByPrice">
                         <h3>Price</h3>
-                        <input type="range" name="price" id="price" min="0" max="200000" step="1" ></input>
-                        <output className="price-output">
-                            <div>Price: $0 - $1,000</div>
-                        </output>
+                        {renderRangeSlider(updateProductsByPriceRange, minPrice, maxPrice)}
                     </div>
                     <fieldset className="categories" id="categories" onChange={(closeSidebar)}>
                         <h3>Categories</h3>
@@ -77,7 +79,7 @@ const Products = () => {
                         <h2>Products</h2>
                         <span>Showing 1-16 of 29 results</span>
                         <div className="sortBy">
-                            {renderSortForm(products, sort, currentCategory, currentRating, setProductsToDisplay, switchSortBy, switchPage)}
+                            {renderSortForm(products, sort, currentCategory, currentRating, setProductsToDisplay, switchSortBy, switchPage, minPrice, maxPrice)}
                         </div>
                     </div>
                     <div className="gridIcons">
@@ -90,7 +92,7 @@ const Products = () => {
                     </div>
                     <div className="pagination">
                         <ul>
-                            {renderPagination(products, sort, currentCategory, currentRating, currentPage, updateProducts)}
+                            {renderPagination(products, currentCategory, currentRating, currentPage, updateProducts, minPrice, maxPrice)}
                         </ul>
                     </div>
                 </div>
