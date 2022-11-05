@@ -18,13 +18,13 @@ const NotFoundContainer = styled.div`
 
 
 const NotFound = () => {
-    return (
-      <NotFoundContainer>
-        <div className='imgDiv'>
-        <img src={notFound} alt=''/>
-        </div>
-      </NotFoundContainer>
-    )
-  }
+  return (
+    <NotFoundContainer>
+      <div className='imgDiv'>
+        <img src={notFound} alt='' />
+      </div>
+    </NotFoundContainer>
+  )
+}
 
 export default NotFound;

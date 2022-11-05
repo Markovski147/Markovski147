@@ -63,7 +63,7 @@ export const renderSortForm = (products, sort, currentCategory, currentRating, s
     )
 }
 
-export const renderProducts = (products, listView, isInCart, isLoggedIn, toggleCart) => {
+export const renderProducts = (products, listView, isLoggedIn, handleAddItem) => {
     if (products >= 0) {
         return (
             <Spinner />
@@ -84,7 +84,7 @@ export const renderProducts = (products, listView, isInCart, isLoggedIn, toggleC
                             <div className="price">${price}</div>
                             <div className={listView ? 'hidden' : ''}>{rating}&#11088;</div>
                         </div>
-                        <div className={isInCart(id) ? 'cart addedTocart' : 'cart'} title={!isInCart(id) & isLoggedIn ? 'Add to cart' : !isInCart(id) ? 'Please login to use cart' : 'Remove from cart'} onClick={toggleCart(products, id, isLoggedIn)}>
+                        <div className={'cart'} title={isLoggedIn ? 'Add to cart' : 'Please login to use cart'} onClick={handleAddItem(products[id-1])}>
                             &#10084;</div>
                     </div>
                 </div>

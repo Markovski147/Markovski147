@@ -158,7 +158,7 @@ export const ProductsContextProvider = ({ children }) => {
   const [currentId, setCurrentId] = useState();
   const setCurrentProduct = () => {
     let curId = window.location.pathname.slice(-2);
-    setCurrentId(products[curId.replace('/', '') - 1]);  
+    setCurrentId(products[curId.replace('/', '') - 1]);
   }
 
   const contextValues = {

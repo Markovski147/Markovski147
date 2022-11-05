@@ -1,17 +1,24 @@
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
-import NavBar from './components/Navbar/Navbar';
+import NavBar from './components/Navbar/Navbar.js';
 import { NAV_ITEMS } from './helpers/navigation';
-import Footer from './components/Footer/Footer';
-import LoginPage from './pages/LoginPage';
-import Homepage from './pages/Homepage';
-import NotFound from './pages/NotFound';
-import CheckoutPage from './pages/CheckoutPage';
-import ProductsPage from './pages/ProductsPage';
+import Footer from './components/Footer/Footer.js';
+import LoginPage from './pages/LoginPage.js';
+import Homepage from './pages/Homepage.js';
+import NotFound from './pages/NotFound.js';
+import OrderSuccess from './pages/OrderSuccess.js';
+import CheckoutPage from './pages/CheckoutPage.js';
+import ProductsPage from './pages/ProductsPage.js';
 import ProductDetailsPage from './pages/ProductDetailsPage';
-import { screenWidth } from './screenWidth';
+import { screenWidth } from './screenWidth.js';
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from './store/selectors/authSelectors.js';
+import AboutUs from './pages/AboutUs.js';
 
 function App() {
+  
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
   return (
     <div className="app" width={`${screenWidth}`}>
       <NavBar navItems={NAV_ITEMS} />
@@ -26,11 +33,17 @@ function App() {
           <ProductDetailsPage/>
         </Route>
         <Route path='/checkout'>
-          <CheckoutPage/>
+          {isLoggedIn ? <CheckoutPage/> : <Redirect to='/' />}
+        </Route>
+        <Route path='/orderSuccess'>
+          {isLoggedIn ? <OrderSuccess/> : <Redirect to='/' />}
         </Route>
         <Route path='/login'>
-          <LoginPage />
+          {!isLoggedIn ? <LoginPage/> : <Redirect to='/' />}
         </Route>
+        <Route path='/about'>
+          <AboutUs/>
+          </Route>
         <Route>
           <NotFound/>
         </Route>

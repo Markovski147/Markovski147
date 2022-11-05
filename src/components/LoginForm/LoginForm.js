@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { useState, useContext } from 'react';
 import AuthContext from '../../store/auth-context';
+import { useDispatch, useSelector } from 'react-redux'
+import { loginAction } from '../../store/actions/actions.js'
+import { authActions } from '../../store/slices/authLogin.js'
+import { selectError, selectIsLoading, selectIsLoggedIn } from '../../store/selectors/authSelectors'
 
 const LoginFormContainer = styled.div`
     display: block;
@@ -83,49 +87,45 @@ form {
 
 const LoginForm = () => {
 
-    const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const { isLoggedIn, onLogin, loggedInUser, loginUser } = useContext(AuthContext);
+    const { onLogin, loggedInUser, loginUser } = useContext(AuthContext);
+    const [input, setInput] = useState({ email: '', password: '' });
 
-    const database = [
-        {
-            email: "user1",
-            password: "test1"
-        },
-        {
-            email: "user2",
-            password: "test2"
-        }
-    ];
+    const dispatch = useDispatch();
+    const error = useSelector(selectError);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
-    const errors = {
-        email: "This user is not registered",
-        password: "Invalid password"
-    };
+    const data = {
+        username: input.email,
+        password: input.password
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const { email, password } = document.forms[0];
-        const userData = database.find((user) => user.email === email.value);
+        setIsSubmitted(true);
+        onLogin();
+        dispatch(loginAction(data))
+        console.log(data)
+        loginUser(data.username)
+        setTimeout(() => {
+            dispatch(authActions.resetError())
+        }, 5000)
+    }
 
-        if (userData) {
-            if (userData.password !== password.value) {
-                setErrorMessages({ name: "password", message: errors.password });
-            } else {
-                setIsSubmitted(true);
-                onLogin();
-                loginUser(userData);                
-            }
-        } else {
-            setErrorMessages({ name: "email", message: errors.email });
-        }
-    };
+    const inputUserChangeHandler = (e) => {
+        const { value } = e.target
+        setInput({
+            ...input, email: value
+        })
+    }
 
-    const renderErrorMessage = (name) =>
-        name === errorMessages.name && (
-            <div className="error">{errorMessages.message}</div>
-        );
+    const inputPassChangeHandler = (e) => {
+        const { value } = e.target
+        setInput({
+            ...input, password: value
+        })
+    }
 
     const renderForm = (
         <div className='form-container'>
@@ -136,12 +136,11 @@ const LoginForm = () => {
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="input-container">
-                        <input type="text" name="email" required />
+                        <input type="text" name="email" onChange={inputUserChangeHandler} required />
                     </div>
                     <div className="input-container">
-                        <input type="password" name="password" required />
-                        {renderErrorMessage("email")}
-                        {renderErrorMessage("password")}
+                        <input type="password" name="password" onChange={inputPassChangeHandler} required />
+            <div className="error">{error}</div>
                     </div>
                     <div className='frg-msg'>
                         Forgot your password?
@@ -156,11 +155,11 @@ const LoginForm = () => {
             </div>
         </div>
     );
-    
+
     return (
         <LoginFormContainer>
             <div>
-                {isLoggedIn ? isSubmitted ? <div className='loggedIn'>Welcome back {loggedInUser.email}</div> : <div className='loggedIn'>Welcome back {loggedInUser.email}</div> : renderForm}
+                {isLoggedIn ? isSubmitted ? <div className='loggedIn'>Welcome back {data.username}</div> : <div className='loggedIn'>Welcome back {data.username}</div> : renderForm}
             </div>
         </LoginFormContainer>
     );

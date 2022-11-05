@@ -3,15 +3,20 @@ import list from '../../assets/list.svg'
 import { FaBars } from "react-icons/fa";
 import ProductContext from '../../store/productsList';
 import CartContext from "../../store/cart";
-import { useContext, useState } from 'react';
-import AuthContext from "../../store/auth-context";
+import { useContext, useState, useEffect } from 'react';
 import { renderCategories, renderPagination, renderSortForm, renderProducts } from "./renderFunctions.js";
 import { renderRatings, renderRangeSlider } from "./renderFunctions.tsx";
 import './products.css';
 import "./spinner.css";
+import { useSelector, useDispatch } from 'react-redux';
+import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
+import { cartActions } from "../../store/slices/cartSlice.js";
+import { setCartItem, getCart } from "../../store/actions/cartActions.js";
+import { selectCartItems, selectCartProducts, selectCartId } from '../../store/selectors/cartSelectors.js';
 
 const Products = () => {
-    const { isLoggedIn } = useContext(AuthContext);
+
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const {
         products,
@@ -31,10 +36,15 @@ const Products = () => {
         maxPrice
     } = useContext(ProductContext);
 
-    const {
-        toggleCart,
-        isInCart
-    } = useContext(CartContext);
+
+    const dispatch = useDispatch();
+    const cartItems = useSelector(selectCartItems);
+    const cartProducts = useSelector(selectCartProducts);
+    const cartId = useSelector(selectCartId);
+
+    useEffect(() => {
+        dispatch(getCart());
+    }, [dispatch])
 
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
@@ -43,6 +53,22 @@ const Products = () => {
     const [listView, setlistView] = useState(true);
     const showListView = () => setlistView(true);
     const showGridView = () => setlistView(false);
+
+    const handleAddItem = (product) => (e) => {
+        e.preventDefault();
+        if (isLoggedIn) {
+        const currentCartItems = [...cartItems];
+        currentCartItems.push(product);
+        dispatch(cartActions.addCartItems(currentCartItems));
+        dispatch(setCartItem(product.id, cartId));
+        dispatch(cartActions.productNumber(currentCartItems.length));
+        setTimeout(() => {
+            dispatch(getCart());
+        }, 500);
+    } else {
+        return console.log('Log in to use cart');
+    }
+    }
 
     return (
         <div className='productsContainer'>
@@ -88,7 +114,7 @@ const Products = () => {
                         <img src={list} alt='list' className={!listView ? 'active' : ''} onClick={showGridView}></img>
                     </div>
                     <div className='cardGridContainer'>
-                        {renderProducts(productsToDisplay, listView, isInCart, isLoggedIn, toggleCart)}
+                        {renderProducts(productsToDisplay, listView, isLoggedIn, handleAddItem)}
                     </div>
                     <div className="pagination">
                         <ul>

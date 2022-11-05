@@ -1,12 +1,17 @@
 import ProductContext from '../../store/productsList';
 import CartContext from '../../store/cart'
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AuthContext from "../../store/auth-context";
 import { renderSimilarProducts } from "./renderFunctions.js";
 import { checkProduct, toggleMenu } from "./renderFunctions.tsx";
 import "./spinner.css";
 import notFound from '../../assets/not-found.jpg';
+import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
+import { cartActions } from "../../store/slices/cartSlice.js";
+import { setCartItem, getCart } from "../../store/actions/cartActions.js";
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCartItems, selectCartProducts, selectCartId } from '../../store/selectors/cartSelectors.js';
 
 const NoProductContainer = styled.div`
 
@@ -269,7 +274,7 @@ h5 span {
 
 const ProductDetails = () => {
 
-    const { isLoggedIn, triggerLoading, isLoading } = useContext(AuthContext);
+    const { triggerLoading, isLoading } = useContext(AuthContext);
 
     const {
         products,
@@ -277,6 +282,12 @@ const ProductDetails = () => {
         currentId,
         setCurrentProduct
     } = useContext(ProductContext);
+
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const dispatch = useDispatch();
+    const cartItems = useSelector(selectCartItems);
+    const cartProducts = useSelector(selectCartProducts);
+    const cartId = useSelector(selectCartId);
 
     const {
         toggleCart,
@@ -291,6 +302,10 @@ const ProductDetails = () => {
     const [showShipping, setShowShipping] = useState(false);
     const [mainImage, setMainImage] = useState();
 
+    useEffect(() => {
+        dispatch(getCart());
+    }, [dispatch])
+
     const setMainImageHandler = (img) => () => {
         let newMainImage = product.images[img];
         setMainImage(newMainImage);
@@ -299,6 +314,23 @@ const ProductDetails = () => {
     const [enlargeImg, setEnlargeImg] = useState(false);
     const toggleEnlarge = () => () => {
         enlargeImg ? setEnlargeImg(false) : setEnlargeImg(true);
+    }
+
+    const handleAddItem = (product) => (e) => {
+        e.preventDefault();
+        console.log('test', product.id)
+        if (isLoggedIn) {
+        const currentCartItems = [...cartItems];
+        currentCartItems.push(product);
+        dispatch(cartActions.addCartItems(currentCartItems));
+        dispatch(setCartItem(product.id, cartId));
+        dispatch(cartActions.productNumber(currentCartItems.length));
+        setTimeout(() => {
+            dispatch(getCart());
+        }, 500);
+    } else {
+        return console.log('Log in to use cart');
+    }
     }
 
     if (!product) {
@@ -334,7 +366,7 @@ const ProductDetails = () => {
                         <h4>Stock: {product.stock}</h4>
                         <h5>Discount: <span>{product.discountPercentage}%</span></h5>
                         <div className={!isLoggedIn ? 'btnDiv' : ''} title={!isLoggedIn ? 'Please login to use cart' : ''}>
-                            <button className='checkoutBtn' onClick={toggleCart(products, product.id, isLoggedIn)}>{isInCart(product.id) ? 'Remove from cart' : 'Add to cart'}</button>
+                            <button className='checkoutBtn' onClick={handleAddItem(currentId)}>Add to cart</button>
                         </div>
                     </div>
                     <div className='details-container'>

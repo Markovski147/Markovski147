@@ -7,15 +7,20 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from './store/auth-context';
 import { ProductsContextProvider } from './store/productsList';
 import { CartContextProvider } from './store/cart';
+import { Provider } from 'react-redux';
+import { store } from './store';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
     <CartContextProvider>
       <ProductsContextProvider>
+      <Provider store={store}>
         <AuthContextProvider>
           <App />
         </AuthContextProvider>
+      </Provider>
       </ProductsContextProvider>
       </CartContextProvider>
     </BrowserRouter>

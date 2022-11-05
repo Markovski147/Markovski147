@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { NavLink, Link } from "react-router-dom";
 import AuthContext from '../../store/auth-context';
 import SidebarComponent from './sidebarComponent';
+import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
+import { useSelector } from 'react-redux';
 
 const NavBarContainer = styled.div`
   display: flex;
@@ -174,7 +176,8 @@ function NavBar({
   navItems = [],
 }) {
 
-  const { isLoggedIn, loggedInUser, showSidebar, closeSidebar } = useContext(AuthContext);
+  const { loggedInUser, showSidebar, closeSidebar } = useContext(AuthContext);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   return (
     <NavBarContainer>
@@ -198,7 +201,7 @@ function NavBar({
         </ul>
         <div className='navbar-btns'>
           <div className={isLoggedIn ? 'welcome' : 'hidden'}>Welcome
-            <span> {loggedInUser ? loggedInUser.email : ''}!</span>
+            <span> {loggedInUser ? loggedInUser : ''}!</span>
           </div>
           <NavbarButtons onClick={(closeSidebar)} />
         </div>

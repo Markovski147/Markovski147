@@ -1,8 +1,13 @@
 import styled from 'styled-components';
-import { useContext } from 'react';
-import CartContext from '../../store/cart';
-import {calcTotalPrice} from './priceCalc.ts'
+import { useEffect } from 'react';
+import { calcTotalPrice } from './priceCalc.ts'
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCartItems, selectCartProducts, selectCartId } from '../../store/selectors/cartSelectors.js';
+import { getCart, setCart, setCartItem, deleteCartItem } from '../../store/actions/cartActions';
+import { cartActions } from "../../store/slices/cartSlice.js";
+import { setOrders } from '../../store/actions/orderActions.js';
+import { Redirect } from "react-router-dom";
 
 const CheckoutContainer = styled.div`
 display: flex;
@@ -264,50 +269,92 @@ align-items: center;
 `
 
 const Checkout = () => {
-  const {
-    cart,
-    changeQuantity,
-    checkoutCart,
-    cartProducts
-  } = useContext(CartContext);
 
-const renderProducts = (cart) => {
-  if (cart === undefined) {
-    return <div>Your cart is empty.</div>
-} else {
-  return cart.map(({ id, title, price, thumbnail, quantity }, index) => {
-    return (
-      <div key={index} className='product'>
-        <div className='productCard'>
-                <Link to={`/product/${id}`}>
-          <img src={thumbnail} alt='product'></img>
-          </Link>
-          <h4>{title}</h4>
-        </div>
-        <div className='productOptions'>
-          <span>/</span>
-          <div className='quantityContainer'>
-          <span onClick={changeQuantity(id, '-')}>-</span><span className='quantity'>{quantity}</span><span onClick={changeQuantity(id, '+')}>+</span>
-          </div>
-          <span>${price*quantity}</span>
-        </div>
-      </div>
-    )
-    })
+
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCartItems);
+  const cartProducts = useSelector(selectCartProducts);
+  const cartId = useSelector(selectCartId);
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, [dispatch])
+
+
+  console.log('CART ITEMS', cart);
+  console.log('CART PRODUCTS', cartProducts);
+
+  const decreaseQuantity = (id) => () => {
+    let thisProduct = cartProducts.findIndex(obj => obj.product.id === id);
+    let thisId = cartProducts[thisProduct].id;
+    let thisQuantity = cartProducts[thisProduct].quantity;
+    console.log('id is: ', thisId);
+    dispatch(deleteCartItem(thisId));
+    thisQuantity > 1 ? setTimeout(() => {
+      dispatch(setCartItem(id, cartId, thisQuantity - 1));
+    }, 500) : console.log('item removed');
+    setTimeout(() => {
+      dispatch(getCart());
+    }, 1000);
   }
-}
 
-const totalPrice = (cart) => {
-  let total = 0;
-  cart.map(({price, quantity}) => {
-    return total = calcTotalPrice(total, price, quantity);
-  })
-  return (
-    <>
-    <h4>${total}</h4>
-    </>
-  )
-}
+  const increaseQuantity = (id) => () => {
+    let thisProduct = cartProducts.findIndex(product => product.product.id === id);
+    console.log('tihs product', thisProduct);
+    dispatch(cartActions.addCartItems(thisProduct));
+    dispatch(setCartItem(id, cartId));
+    dispatch(cartActions.productNumber(thisProduct.length));
+    console.log(cartId);
+    setTimeout(() => {
+      dispatch(getCart());
+    }, 500);
+  }
+
+  const checkoutCart = () => () => {
+    console.log('current cart id is: ', cartId);
+    dispatch(setOrders());
+    setTimeout(() => {
+      dispatch(setCart());      
+    }, 500);
+  }
+
+  const renderProducts = (cart) => {
+    if (cart === undefined) {
+      return <div>Your cart is empty.</div>
+    } else {
+      return cart.map(({ product, quantity }, index) => {
+        return (
+          <div key={index} className='product'>
+            <div className='productCard'>
+              <Link to={`/product/${product.id}`}>
+                <img src={product.thumbnail} alt='product'></img>
+              </Link>
+              <h4>{product.title}</h4>
+            </div>
+            <div className='productOptions'>
+              <span>/</span>
+              <div className='quantityContainer'>
+                <span onClick={decreaseQuantity(product.id)}>-</span><span className='quantity'>{quantity}</span><span onClick={increaseQuantity(product.id)}>+</span>
+              </div>
+              <span>${product.price * quantity}</span>
+            </div>
+          </div>
+        )
+      })
+    }
+  }
+
+  const totalPrice = (cart) => {
+    let total = 0;
+    cart.map(({ product, quantity }) => {
+      return total = calcTotalPrice(total, product.price, quantity);
+    })
+    return (
+      <>
+        <h4>${total}</h4>
+      </>
+    )
+  }
 
   return (
     <CheckoutContainer>
@@ -324,7 +371,7 @@ const totalPrice = (cart) => {
           </div>
         </div>
         <div className='productCardsContainer'>
-          {renderProducts(cart)}
+          {renderProducts(cartProducts)}
         </div>
         <div className='orderSummaryHeader'>
           <h4>Order summary</h4>
@@ -333,21 +380,23 @@ const totalPrice = (cart) => {
           <div className='orderSummaryContainer'>
             <div className='summary'>
               <h4 >Sub total:</h4>
-              {totalPrice(cart)}
+              {totalPrice(cartProducts)}
             </div>
           </div>
           <div className='totalSummaryContainer'>
             <div className='total'>
               <h4>Total:</h4>
-              {totalPrice(cart)}
+              {totalPrice(cartProducts)}
             </div>
           </div>
         </div>
-          <h6>Shipping fee: free</h6>
+        <h6>Shipping fee: free</h6>
       </div>
       <div className='checkout'>
         <h5>Tax: calculated at checkout</h5>
-        <button className='checkoutBtn' onClick={checkoutCart()} disabled={!cartProducts ? 'disable' : ''}>Checkout</button>
+        <Link to='/orderSuccess'>
+        <button className='checkoutBtn' onClick={checkoutCart()} disabled={cartProducts.length < 1 ? 'disable' : ''}>Checkout</button>
+        </Link>
       </div>
     </CheckoutContainer>
   )

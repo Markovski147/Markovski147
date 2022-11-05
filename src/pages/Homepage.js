@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Slider from '../components/Slider/slider';
 import HotDeals from '../components/HotDeals/HotDeals';
-import WhoAreWe from '../components/WhoAreWe/WhoAreWe'
+import WhoAreWe from '../components/WhoAreWe/WhoAreWe';
 
 
 const HomepageContainer = styled.div`

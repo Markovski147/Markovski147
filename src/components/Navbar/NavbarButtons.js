@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import search from '../../assets/search.svg';
 import cartIcon from '../../assets/cart.svg';
+import logout from '../../assets/logout.webp'
 import user from '../../assets/user.svg';
 import { Link } from "react-router-dom";
-import { useContext } from 'react';
-import CartContext from '../../store/cart';
-import AuthContext from '../../store/auth-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
+import { authActions } from '../../store/slices/authLogin.js';
+import { selectCartProducts } from '../../store/selectors/cartSelectors.js';
 
 const NavbarButtonsContainer = styled.div`
   display: flex;
@@ -37,32 +39,38 @@ const NavbarButtonsContainer = styled.div`
   }
 `;
 
-// TODO: Implmenet Link component for all navigation buttons
 const NavbarButtons = () => {
   
-  const { isLoggedIn } = useContext(AuthContext);
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector(selectIsLoggedIn)
 
-  const {cartProducts} = useContext(CartContext);
+  const cartProducts = useSelector(selectCartProducts);
+  const cartProductsLength = cartProducts.reduce((accumulator, object) => {
+    return accumulator + object.quantity;
+  }, 0);
+  
 
   return (
     <NavbarButtonsContainer>
       <div className='search-btn btn-container'>
         <img src={search} alt='Search' />
       </div>
-      <Link to='checkout'>
+      <Link to='/checkout'>
       <div className='cart-btn btn-container'>
         <img src={cartIcon} alt='Cart' />
-        <span className='cart-values'>{cartProducts}</span>
+        <span className='cart-values'>{cartProductsLength}</span>
       </div>
       </Link>
       {isLoggedIn ? (
-        <button className='auth-btn btn-container'>
-          <img src={user} alt='Logged out user' />
+        <Link to='/'>
+        <button className='auth-btn btn-container' onClick={() => dispatch(authActions.logout())}>
+          <img src={!isLoggedIn ? user : logout} alt='Logged out user' />
         </button>
+        </Link>
       ) : (
         <Link to='/login'>
         <button className='auth-btn btn-container'>
-          <img src={user} alt='Logged in user' />
+          <img src={!isLoggedIn ? user : logout} alt='Logged in user' />
         </button>
         </Link>
       )}
