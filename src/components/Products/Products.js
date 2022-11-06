@@ -2,7 +2,6 @@ import grid from '../../assets/grid.svg'
 import list from '../../assets/list.svg'
 import { FaBars } from "react-icons/fa";
 import ProductContext from '../../store/productsList';
-import CartContext from "../../store/cart";
 import { useContext, useState, useEffect } from 'react';
 import { renderCategories, renderPagination, renderSortForm, renderProducts } from "./renderFunctions.js";
 import { renderRatings, renderRangeSlider } from "./renderFunctions.tsx";
@@ -12,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
 import { cartActions } from "../../store/slices/cartSlice.js";
 import { setCartItem, getCart } from "../../store/actions/cartActions.js";
-import { selectCartItems, selectCartProducts, selectCartId } from '../../store/selectors/cartSelectors.js';
+import { selectCartItems, selectCartId } from '../../store/selectors/cartSelectors.js';
 
 const Products = () => {
 
@@ -39,7 +38,6 @@ const Products = () => {
 
     const dispatch = useDispatch();
     const cartItems = useSelector(selectCartItems);
-    const cartProducts = useSelector(selectCartProducts);
     const cartId = useSelector(selectCartId);
 
     useEffect(() => {

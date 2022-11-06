@@ -236,7 +236,7 @@ img:hover {
 
 .productDetails {
     margin: auto 0 auto 10%;
-    width: 100%;
+    width: 85%;
 }
 
 .productDetails>div {
@@ -255,11 +255,26 @@ img:hover {
     display: none;
 }
 
+.cartContainer{
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+}
+
 .cart {
     position: relative;
-    margin: 5% 5% auto auto;
     float: right;
-    font-size: 28px;
+    font-size: 24px;
+    cursor: pointer;
+    width: 10%;
+    text-align: center;
+    color: #fff;
+}
+
+.wishList{
+    position: relative;
+    float: right;
+    font-size: 24px;
     cursor: pointer;
     width: 10%;
     text-align: center;
@@ -392,8 +407,8 @@ img:hover {
         max-font-size: 14px;
     }
 
-    .cart {
-        font-size: 5vw;
+    .cart, .wishList {
+        font-size: 3.6vw;
     }
 
     .alert {
@@ -433,6 +448,20 @@ img:hover {
     }
 
     .cart[title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        top: -2rem;
+        left: -4rem;
+        padding: 0.5rem;
+        border: 1px solid white 5px;
+        border-radius: 5px;
+        width: 8rem;
+        font-size: 12px;
+        background: white;
+        color: black;
+    }
+    
+    .wishlist[title]:hover::after {
         content: attr(title);
         position: absolute;
         top: -2rem;

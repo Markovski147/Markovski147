@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import {Spinner}  from "./renderFunctions.tsx";
+import { BsFillBagPlusFill } from 'react-icons/bs'
 
 export const renderCategories = (products, updateFunc) => {
     let categories = [];
@@ -84,8 +85,11 @@ export const renderProducts = (products, listView, isLoggedIn, handleAddItem) =>
                             <div className="price">${price}</div>
                             <div className={listView ? 'hidden' : ''}>{rating}&#11088;</div>
                         </div>
-                        <div className={'cart'} title={isLoggedIn ? 'Add to cart' : 'Please login to use cart'} onClick={handleAddItem(products[id-1])}>
-                            &#10084;</div>
+                        <div className="cartContainer">
+                        <div className='cart' title={isLoggedIn ? 'Add to cart' : 'Please login to use cart'} onClick={handleAddItem(products[id-1])}>
+                        <BsFillBagPlusFill/></div>
+                        <div className='wishList' title={isLoggedIn ? 'Add to wishlist' : 'Please login to continue shopping'}>&#10084;</div>
+                        </div>
                     </div>
                 </div>
             )

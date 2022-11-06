@@ -1,5 +1,4 @@
 import ProductContext from '../../store/productsList';
-import CartContext from '../../store/cart'
 import { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AuthContext from "../../store/auth-context";
@@ -11,7 +10,7 @@ import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
 import { cartActions } from "../../store/slices/cartSlice.js";
 import { setCartItem, getCart } from "../../store/actions/cartActions.js";
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCartItems, selectCartProducts, selectCartId } from '../../store/selectors/cartSelectors.js';
+import { selectCartItems, selectCartId } from '../../store/selectors/cartSelectors.js';
 
 const NoProductContainer = styled.div`
 
@@ -286,13 +285,7 @@ const ProductDetails = () => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const dispatch = useDispatch();
     const cartItems = useSelector(selectCartItems);
-    const cartProducts = useSelector(selectCartProducts);
     const cartId = useSelector(selectCartId);
-
-    const {
-        toggleCart,
-        isInCart
-    } = useContext(CartContext);
 
     setCurrentProduct(currentId);
     let product = currentId;
@@ -318,7 +311,7 @@ const ProductDetails = () => {
 
     const handleAddItem = (product) => (e) => {
         e.preventDefault();
-        console.log('test', product.id)
+        console.log('test', product)
         if (isLoggedIn) {
         const currentCartItems = [...cartItems];
         currentCartItems.push(product);
