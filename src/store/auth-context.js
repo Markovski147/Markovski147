@@ -42,10 +42,10 @@ export const AuthContextProvider = ({ children }) => {
         if (!isLoading) {
             return
         } else {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-          }, 2000);
+            setIsLoading(true);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
         }
     }
 

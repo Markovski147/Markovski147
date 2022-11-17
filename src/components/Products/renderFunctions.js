@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import {Spinner}  from "./renderFunctions.tsx";
+import { Spinner } from "./renderFunctions.tsx";
 import { BsFillBagPlusFill } from 'react-icons/bs'
 
 export const renderCategories = (products, updateFunc) => {
     let categories = [];
-    products.map(({ category }) => {
+    products.map(({ category }, index) => {
         if (!categories.includes(category)) {
             return categories.push(category);
         } else {
@@ -13,8 +13,8 @@ export const renderCategories = (products, updateFunc) => {
     })
     return categories.map((category, index) => {
         return (
-            <div>
-                <input type="radio" name='category' value='category' key={index} onClick={updateFunc(category)} />{category.charAt(0).toUpperCase() + category.slice(1)}
+            <div key={index}>
+                <input type="radio" name='category' value='category' onClick={updateFunc(category)} />{category.charAt(0).toUpperCase() + category.slice(1)}
             </div>
         )
     })
@@ -86,9 +86,9 @@ export const renderProducts = (products, listView, isLoggedIn, handleAddItem) =>
                             <div className={listView ? 'hidden' : ''}>{rating}&#11088;</div>
                         </div>
                         <div className="cartContainer">
-                        <div className='cart' title={isLoggedIn ? 'Add to cart' : 'Please login to use cart'} onClick={handleAddItem(products[id-1])}>
-                        <BsFillBagPlusFill/></div>
-                        <div className='wishList' title={isLoggedIn ? 'Add to wishlist' : 'Please login to continue shopping'}>&#10084;</div>
+                            <div className='cart' title={isLoggedIn ? 'Add to cart' : 'Please login to use cart'} onClick={handleAddItem(products[index])}>
+                                <BsFillBagPlusFill /></div>
+                            <div className='wishList' title={isLoggedIn ? 'Add to wishlist' : 'Please login to continue shopping'}>&#10084;</div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@ export const renderSimilarProducts = (products, currentItem, updateFunc, setMain
     } else {
         return updatedProducts.slice(0, 2).map(({ id, title, price, thumbnail, brand }, index) => {
             return (
-                <div className="item-container">
+                <div key={index} className="item-container">
                     <Link onClick={updateFunc()} to={`/product/${id}`}>
                         <img src={thumbnail} alt='' onClick={setMainImageHandler(0)}></img>
                     </Link>

@@ -11,17 +11,17 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addCartItems(state, { payload }) {
+    setCartItems(state, { payload }) {
       state.cartItems = payload
     },
-    cartId(state, { payload }) {
+    setCartId(state, { payload }) {
       console.log('PAYLOAD', payload)
       state.cartId = payload;
     },
-    cartProducts(state, { payload }) {
+    setCartProducts(state, { payload }) {
       state.cartProducts = payload
     },
-    productNumber(state, { payload }) {
+    setProductNumber(state, { payload }) {
       state.productNumber = payload;
     }
   }

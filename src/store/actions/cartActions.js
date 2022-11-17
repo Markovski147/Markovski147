@@ -11,8 +11,8 @@ export const setCart = () => async (dispatch) => {
     });
     console.log('CART RESPONSE', response)
     const cartId = response.data?.data?.id;
-    dispatch(cartActions.cartId(cartId))
-  } catch(error) {
+    dispatch(cartActions.setCartId(cartId))
+  } catch (error) {
     console.log(error)
   }
 }
@@ -29,7 +29,7 @@ export const setCartItem = (productId, sessionId, quantity = 1) => async (dispat
       }
     });
     console.log('CART ITEM RESPONSE', response)
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
@@ -44,9 +44,9 @@ export const getCart = () => async (dispatch) => {
     const cartId = response.data?.data?.id;
     const cart = response.data?.data?.cartItems;
     cart.sort((a, b) => Number(b.product?.id) - Number(a.product?.id));
-    dispatch(cartActions.cartProducts(cart));
-    dispatch(cartActions.cartId(cartId));
-  } catch(error) {
+    dispatch(cartActions.setCartProducts(cart));
+    dispatch(cartActions.setCartId(cartId));
+  } catch (error) {
     console.log(error)
   }
 }
@@ -58,7 +58,7 @@ export const deleteCartItem = (productId) => async (dispatch) => {
       url: `/cart/item/${productId}`,
     });
     console.log('DELETE CART ITEM RESPONSE', response)
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
@@ -70,8 +70,8 @@ export const deleteCart = (cartId) => async (dispatch) => {
       url: `/cart/${cartId}`
     });
     console.log('DELETE CART RESPONSE', response)
-    dispatch(cartActions.cartId(undefined));
-  } catch(error) {
+    dispatch(cartActions.setCartId(undefined));
+  } catch (error) {
     console.log(error)
   }
 }

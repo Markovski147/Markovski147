@@ -15,9 +15,10 @@ export const checkProduct = (isLoading: boolean, triggerLoading: Function, img: 
 
 export const renderRatings = (updateFunc: Function) => {
     return [...Array(6).keys()].splice(1).map((rating, index) => {
-        return (<div>
-            <input type="radio" name="ratings" value={rating} key={index} onClick={updateFunc(rating)} />{rating}
-        </div>
+        return (
+            <div key={index}>
+                <input type="radio" name="ratings" value={rating} onClick={updateFunc(rating)} />{rating}
+            </div>
         )
     });
 }

@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useState, useContext } from 'react';
 import AuthContext from '../../store/auth-context';
 import { useDispatch, useSelector } from 'react-redux'
-import { loginAction } from '../../store/actions/actions.js'
+import { loginAction } from '../../store/actions/loginActions.js'
 import { authActions } from '../../store/slices/authLogin.js'
-import { selectError, selectIsLoading, selectIsLoggedIn } from '../../store/selectors/authSelectors'
+import { selectError, selectIsLoggedIn } from '../../store/selectors/authSelectors'
 
 const LoginFormContainer = styled.div`
     display: block;
@@ -86,9 +86,8 @@ form {
 
 
 const LoginForm = () => {
-
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const { onLogin, loggedInUser, loginUser } = useContext(AuthContext);
+    const { onLogin, loginUser } = useContext(AuthContext);
     const [input, setInput] = useState({ email: '', password: '' });
 
     const dispatch = useDispatch();
@@ -140,7 +139,7 @@ const LoginForm = () => {
                     </div>
                     <div className="input-container">
                         <input type="password" name="password" onChange={inputPassChangeHandler} required />
-            <div className="error">{error}</div>
+                        <div className="error">{error}</div>
                     </div>
                     <div className='frg-msg'>
                         Forgot your password?

@@ -85,34 +85,34 @@ const SliderContainer = styled.div`
     }
 `
 
-const Slider  = () => {
-    const   [activeSlide, setActiveSlide] = useState(0);
+const Slider = () => {
+    const [activeSlide, setActiveSlide] = useState(0);
     const slides = [banner1, banner2, banner3];
 
     const nextSlide = () => {
-        if (activeSlide < slides.length-1) {
-        setActiveSlide(activeSlide + 1);
+        if (activeSlide < slides.length - 1) {
+            setActiveSlide(activeSlide + 1);
         } else {
             setActiveSlide(0);
         }
     }
-    
+
     const prevSlide = () => {
         if (activeSlide > 0) {
             setActiveSlide(activeSlide - 1);
-            } else {
-                setActiveSlide(slides.length-1);
-            }
+        } else {
+            setActiveSlide(slides.length - 1);
+        }
     }
- 
+
     return (
         <SliderContainer>
             <button onClick={prevSlide} className='prev'>&#10094;</button>
             <div className={activeSlide === 0 ? 'slide1 fade active' : 'slide1 fade'}>
                 <img src={banner1} alt=''></img>
                 <div className='bannerText'>
-                <h1>eShopp</h1>
-                <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+                    <h1>eShopp</h1>
+                    <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
                 </div>
             </div>
             <div className={activeSlide === 1 ? 'slide2 fade active' : 'slide2 fade'}>

@@ -27,7 +27,7 @@ export const CartContextProvider = ({ children }) => {
 
     const isInCart = (id) => {
         cart.forEach((product) => {
-          product.quantity = 1;
+            product.quantity = 1;
         });
         if (cart.find(product => product.id === id)) {
             return true
@@ -52,7 +52,7 @@ export const CartContextProvider = ({ children }) => {
 
     const checkoutCart = () => () => {
         if (cartProducts) {
-        return setCart([]);
+            return setCart([]);
         } else {
             return console.log('Your cart is empty')
         }

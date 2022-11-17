@@ -86,41 +86,41 @@ const HotDealsContainer = styled.div`
 
 const HotDeals = () => {
     return (
-    <HotDealsContainer>
-        <div className='cardContainer'>
-            <h1>Hot Deals</h1>
-            <div className='gridContainer'>
-                <div className='card'>
-                    <img src={img} alt=''></img>
-                    <div>Rating</div>
-                    <div>Name of product</div>
-                    <div>Price</div>
-                    <button>Buy Now</button>
-                </div>
-                <div className='card'>
-                    <img src={img} alt=''></img>
-                    <div>Rating</div>
-                    <div>Name of product</div>
-                    <div>Price</div>
-                    <button>Buy Now</button>
-                </div>
-                <div className='card'>
-                    <img src={img} alt=''></img>
-                    <div>Rating</div>
-                    <div>Name of product</div>
-                    <div>Price</div>
-                    <button>Buy Now</button>
-                </div>
-                <div className='card'>
-                    <img src={img} alt=''></img>
-                    <div>Rating</div>
-                    <div>Name of product</div>
-                    <div>Price</div>
-                    <button>Buy Now</button>
+        <HotDealsContainer>
+            <div className='cardContainer'>
+                <h1>Hot Deals</h1>
+                <div className='gridContainer'>
+                    <div className='card'>
+                        <img src={img} alt=''></img>
+                        <div>Rating</div>
+                        <div>Name of product</div>
+                        <div>Price</div>
+                        <button>Buy Now</button>
+                    </div>
+                    <div className='card'>
+                        <img src={img} alt=''></img>
+                        <div>Rating</div>
+                        <div>Name of product</div>
+                        <div>Price</div>
+                        <button>Buy Now</button>
+                    </div>
+                    <div className='card'>
+                        <img src={img} alt=''></img>
+                        <div>Rating</div>
+                        <div>Name of product</div>
+                        <div>Price</div>
+                        <button>Buy Now</button>
+                    </div>
+                    <div className='card'>
+                        <img src={img} alt=''></img>
+                        <div>Rating</div>
+                        <div>Name of product</div>
+                        <div>Price</div>
+                        <button>Buy Now</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </HotDealsContainer>
+        </HotDealsContainer>
     )
 }
 

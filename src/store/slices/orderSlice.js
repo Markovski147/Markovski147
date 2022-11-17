@@ -8,7 +8,7 @@ const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    orderItems(state, { payload }) {
+    setOrderItems(state, { payload }) {
       state.orderedProducts = payload
     }
   }

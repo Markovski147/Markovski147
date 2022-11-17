@@ -2,12 +2,15 @@ import NavbarButtons from './NavbarButtons';
 import { useContext } from 'react';
 import { Link } from "react-router-dom";
 import AuthContext from '../../store/auth-context';
+import { selectIsLoggedIn } from '../../store/selectors/authSelectors.js';
+import { useSelector } from 'react-redux'
 
 function SidebarComponent({
     navItems = [],
 }) {
 
-    const { isLoggedIn, sidebar, closeSidebar } = useContext(AuthContext);
+    const { sidebar, closeSidebar } = useContext(AuthContext);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     return (
         <div className={sidebar ? 'sidebar-container activeNav' : 'sidebar-container'}>

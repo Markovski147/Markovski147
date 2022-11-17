@@ -255,7 +255,7 @@ img:hover {
     display: none;
 }
 
-.cartContainer{
+.cartContainer {
     display: flex;
     flex-direction: column;
     width: 15%;
@@ -271,7 +271,7 @@ img:hover {
     color: #fff;
 }
 
-.wishList{
+.wishList {
     position: relative;
     float: right;
     font-size: 24px;
@@ -407,7 +407,8 @@ img:hover {
         max-font-size: 14px;
     }
 
-    .cart, .wishList {
+    .cart,
+    .wishList {
         font-size: 3.6vw;
     }
 
@@ -460,7 +461,7 @@ img:hover {
         background: white;
         color: black;
     }
-    
+
     .wishlist[title]:hover::after {
         content: attr(title);
         position: absolute;

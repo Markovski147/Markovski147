@@ -1,12 +1,7 @@
-import styled from 'styled-components';
 import WhoAreWe from '../components/WhoAreWe/WhoAreWe'
 
-const AboutUs = () => {
-    return (
-        <>
-        <WhoAreWe/>
-        </>
-    )
-  }
+const AboutUs = () => (
+  <WhoAreWe />
+)
 
 export default AboutUs;

@@ -11,13 +11,13 @@ const HomepageContainer = styled.div`
 
 
 const Homepage = () => {
-    return (
-      <HomepageContainer>
-        <Slider />
-        <HotDeals />
-        <WhoAreWe />
-      </HomepageContainer>
-    )
-  }
+  return (
+    <HomepageContainer>
+      <Slider />
+      <HotDeals />
+      <WhoAreWe />
+    </HomepageContainer>
+  )
+}
 
 export default Homepage;

@@ -7,7 +7,6 @@ import { selectCartItems, selectCartProducts, selectCartId } from '../../store/s
 import { getCart, setCart, setCartItem, deleteCartItem } from '../../store/actions/cartActions';
 import { cartActions } from "../../store/slices/cartSlice.js";
 import { setOrders } from '../../store/actions/orderActions.js';
-import { Redirect } from "react-router-dom";
 
 const CheckoutContainer = styled.div`
 display: flex;
@@ -301,9 +300,9 @@ const Checkout = () => {
   const increaseQuantity = (id) => () => {
     let thisProduct = cartProducts.findIndex(product => product.product.id === id);
     console.log('tihs product', thisProduct);
-    dispatch(cartActions.addCartItems(thisProduct));
+    dispatch(cartActions.setCartItems(thisProduct));
     dispatch(setCartItem(id, cartId));
-    dispatch(cartActions.productNumber(thisProduct.length));
+    dispatch(cartActions.setProductNumber(thisProduct.length));
     console.log(cartId);
     setTimeout(() => {
       dispatch(getCart());
@@ -314,7 +313,7 @@ const Checkout = () => {
     console.log('current cart id is: ', cartId);
     dispatch(setOrders());
     setTimeout(() => {
-      dispatch(setCart());      
+      dispatch(setCart());
     }, 500);
   }
 
@@ -395,7 +394,7 @@ const Checkout = () => {
       <div className='checkout'>
         <h5>Tax: calculated at checkout</h5>
         <Link to='/orderSuccess'>
-        <button className='checkoutBtn' onClick={checkoutCart()} disabled={cartProducts.length < 1 ? 'disable' : ''}>Checkout</button>
+          <button className='checkoutBtn' onClick={checkoutCart()} disabled={cartProducts.length < 1 ? 'disable' : ''}>Checkout</button>
         </Link>
       </div>
     </CheckoutContainer>

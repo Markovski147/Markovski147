@@ -113,7 +113,7 @@ export const ProductsContextProvider = ({ children }) => {
 
   const updateProduct = () => () => {
     let updatedProducts = [...products];
-    setProductsToDisplay(updatedProducts);  
+    setProductsToDisplay(updatedProducts);
   }
 
   const updateProductsByCategory = (cat) => () => {

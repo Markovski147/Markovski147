@@ -155,11 +155,11 @@ const Footer = () => {
       <div className='footer'>
         <div className='iconsContainer'>
           <img className='logo' src={logo} alt='Logo' />
-        <div className='socialMedia'>
-          <img className='media' src={fb} alt='fb' />
-          <img className='media' src={insta} alt='insta' />
-          <img className='media' src={twitter} alt='twitter' />
-        </div>
+          <div className='socialMedia'>
+            <img className='media' src={fb} alt='fb' />
+            <img className='media' src={insta} alt='insta' />
+            <img className='media' src={twitter} alt='twitter' />
+          </div>
         </div>
         <div className='footer-nav'>
           <div>

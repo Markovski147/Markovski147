@@ -313,23 +313,23 @@ const ProductDetails = () => {
         e.preventDefault();
         console.log('test', product)
         if (isLoggedIn) {
-        const currentCartItems = [...cartItems];
-        currentCartItems.push(product);
-        dispatch(cartActions.addCartItems(currentCartItems));
-        dispatch(setCartItem(product.id, cartId));
-        dispatch(cartActions.productNumber(currentCartItems.length));
-        setTimeout(() => {
-            dispatch(getCart());
-        }, 500);
-    } else {
-        return console.log('Log in to use cart');
-    }
+            const currentCartItems = [...cartItems];
+            currentCartItems.push(product);
+            dispatch(cartActions.setCartItems(currentCartItems));
+            dispatch(setCartItem(product.id, cartId));
+            dispatch(cartActions.setProductNumber(currentCartItems.length));
+            setTimeout(() => {
+                dispatch(getCart());
+            }, 500);
+        } else {
+            return console.log('Log in to use cart');
+        }
     }
 
     if (!product) {
         return (
             <NoProductContainer>
-            {checkProduct(isLoading, triggerLoading, notFound)}
+                {checkProduct(isLoading, triggerLoading, notFound)}
             </NoProductContainer>
         )
     } else return (

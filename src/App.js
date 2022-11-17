@@ -16,7 +16,7 @@ import { selectIsLoggedIn } from './store/selectors/authSelectors.js';
 import AboutUs from './pages/AboutUs.js';
 
 function App() {
-  
+
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   return (
@@ -27,28 +27,28 @@ function App() {
           <Homepage />
         </Route>
         <Route path='/products' exact>
-          <ProductsPage/>
+          <ProductsPage />
         </Route>
         <Route path='/product'>
-          <ProductDetailsPage/>
+          <ProductDetailsPage />
         </Route>
         <Route path='/checkout'>
-          {isLoggedIn ? <CheckoutPage/> : <Redirect to='/' />}
+          {isLoggedIn ? <CheckoutPage /> : <Redirect to='/' />}
         </Route>
         <Route path='/orderSuccess'>
-          {isLoggedIn ? <OrderSuccess/> : <Redirect to='/' />}
+          {isLoggedIn ? <OrderSuccess /> : <Redirect to='/' />}
         </Route>
         <Route path='/login'>
-          {!isLoggedIn ? <LoginPage/> : <Redirect to='/' />}
+          {!isLoggedIn ? <LoginPage /> : <Redirect to='/' />}
         </Route>
         <Route path='/about'>
-          <AboutUs/>
-          </Route>
+          <AboutUs />
+        </Route>
         <Route>
-          <NotFound/>
+          <NotFound />
         </Route>
       </Switch>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

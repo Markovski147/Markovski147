@@ -55,17 +55,17 @@ const Products = () => {
     const handleAddItem = (product) => (e) => {
         e.preventDefault();
         if (isLoggedIn) {
-        const currentCartItems = [...cartItems];
-        currentCartItems.push(product);
-        dispatch(cartActions.addCartItems(currentCartItems));
-        dispatch(setCartItem(product.id, cartId));
-        dispatch(cartActions.productNumber(currentCartItems.length));
-        setTimeout(() => {
-            dispatch(getCart());
-        }, 500);
-    } else {
-        return console.log('Log in to use cart');
-    }
+            const currentCartItems = [...cartItems];
+            currentCartItems.push(product);
+            dispatch(cartActions.setCartItems(currentCartItems));
+            dispatch(setCartItem(product?.id, cartId));
+            dispatch(cartActions.setProductNumber(currentCartItems.length));
+            setTimeout(() => {
+                dispatch(getCart());
+            }, 500);
+        } else {
+            return console.log('Log in to use cart');
+        }
     }
 
     return (

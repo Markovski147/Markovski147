@@ -10,7 +10,7 @@ export const setOrders = () => async (dispatch) => {
       url: '/order'
     });
     console.log('ORDER RESPONSE', response)
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
@@ -22,8 +22,8 @@ export const getOrders = () => async (dispatch) => {
       url: `/order?page=1&limit=50`
     });
     console.log('ORDER RESPONSE', response)
-    dispatch(orderActions.orderItems(response.data?.data?.items))
-  } catch(error) {
+    dispatch(orderActions.setOrderItems(response.data?.data?.items))
+  } catch (error) {
     console.log(error)
   }
 }

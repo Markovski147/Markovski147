@@ -20,14 +20,14 @@ const authSlice = createSlice({
       state.accessToken = payload?.data.accessToken
       state.error = null
     },
+    loginFailed(state, { payload }) {
+      state.error = payload
+      state.isLoading = false
+    },
     logout(state) {
       state.isLoggedIn = false
       state.accessToken = null
       state.error = null
-    },
-    loginFailed(state, { payload }) {
-      state.error = payload
-      state.isLoading = false
     },
     resetError(state) {
       state.error = null

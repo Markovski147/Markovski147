@@ -44,16 +44,16 @@ const OrderSuccessContainer = styled.div`
 
 
 const OrderSuccess = () => {
-    return (
-        <OrderSuccessContainer>
-            <div className='imgDiv'>
-                <img src={success} alt='' />
-            </div>
-            <Link to='/products'>
+  return (
+    <OrderSuccessContainer>
+      <div className='imgDiv'>
+        <img src={success} alt='' />
+      </div>
+      <Link to='/products'>
         <button className='returnShoppingBtn'>Return to shop</button>
-        </Link>
-        </OrderSuccessContainer>
-    )
+      </Link>
+    </OrderSuccessContainer>
+  )
 }
 
 export default OrderSuccess;
